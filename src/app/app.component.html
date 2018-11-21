@@ -1,0 +1,27 @@
+<header>
+  <h1>Dynamic Angular CRUD Example</h1>
+</header>
+
+<main class="flex">
+  <div id="teddyBearList" class="w-33">
+    <ul class="bear-list">
+      <li *ngFor="let teddyBear of teddyBearList">
+        {{teddyBear.name}}
+      </li>
+    </ul>
+  </div>
+  <div id="teddyBearCompanies" class="w-33">
+    <ul class="bear-list">
+      <li *ngFor="let company of teddyBearCompanies">
+        {{company.name}}
+      </li>
+    </ul>
+  </div>
+  <div id="teddyBearSellers" class="w-33">
+    <ul class="bear-list">
+      <li *ngFor="let seller of teddyBearSellers">
+        {{seller.name}}
+      </li>
+    </ul>
+  </div>
+</main>
