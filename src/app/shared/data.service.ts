@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Observable, Subject, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 
 import { environment } from './../../environments/environment';
 import { TableMap } from './table-map';
@@ -46,6 +47,18 @@ interface TableCRUD {
 export class DataService {
   endpoint: string = environment.serverUrl;
 
+  // Define header options to be applied to all requests
+  httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+      // 'Authorization': 'my-auth-token'
+    }),
+    params: new HttpParams()
+  };
+
+  // Determine whether or not to be optimstic with our Http calls in terms of updating the front end. True means update the front end right away despite what the server does.
+  isOptimistic = true;
+
   // A simple object that is used a cache for any data that has been loaded into the system
   cache: any = {};
   // A map of TableName => Subject for external components to subscribe to, in order to be notified of updates to that table's data
@@ -72,31 +85,73 @@ export class DataService {
    * @param model The interface / class to construct the query against and build response objects from
    * @param query A limiting query to apply to the get. Expects an object of type URLSearchParams to append to the read, or a simple string
    */
-  read<T>(model: T | any, query?: URLSearchParams | string) {
-    this.loadingMap[model.table] = true;
+  read<T>(model: T | any, query?: HttpParams | String) {
+    this.loadingMap[model.tableName] = true;
+
+    const httpOpts = Object.assign({}, this.httpOptions);
 
     if (query) {
-      const searchParams = new URLSearchParams();
-
+      httpOpts.params = this.createSearchParams(query);
     }
 
-    const url = `${this.endpoint}${model.table}`;
-    this.http.get<any[]>(url)
+    const url = `${this.endpoint}${model.tableName}`;
+    this.http.get<any[]>(url, httpOpts)
       .subscribe(
         res => {
-          this.cache[model.table] = [];
-          res.forEach((el: T) => {
-            this.cache[model.table].push(new model(el));
-          });
-          // Update Frontend
-          this.subjectMap[model.table].many.next(this.cache[model.table]);
-          this.loadingMap[model.table] = false;
+          this.cacheAndNotifyRead(model, res);
+          this.loadingMap[model.tableName] = false;
         },
         err => {
-          this.logger.error(err);
-          this.loadingMap[model.table] = false;
+          this.handleHttpError(err);
+          this.loadingMap[model.tableName] = false;
         }
       );
+  }
+
+  readObs<T>(model: T | any, query?: HttpParams | String): Observable<T[]> {
+    this.loadingMap[model.tableName] = true;
+
+    const httpOpts = Object.assign({}, this.httpOptions);
+
+    if (query) {
+      httpOpts.params = this.createSearchParams(query);
+    }
+
+    const url = `${this.endpoint}${model.tableName}`;
+    return this.http.get<T[]>(url, httpOpts)
+      .pipe(
+        catchError(this.handleHttpError),
+        tap((res: T[]) => {
+          this.cacheAndNotifyRead(model, res);
+        })
+      );
+  }
+
+  private createSearchParams(query: HttpParams | String): HttpParams {
+    let newParams = new HttpParams;
+
+    if (query instanceof String) {
+      const searchParams = new HttpParams();
+      const splitQuery = query.split('&');
+      splitQuery.forEach(param => {
+        const keyValPair = param.split('=');
+        searchParams.set(keyValPair[0], keyValPair[1]);
+      });
+      newParams = searchParams;
+    } else {
+      newParams = query;
+    }
+
+    return newParams;
+  }
+
+  private cacheAndNotifyRead<T>(model: T | any, res: T[]) {
+    this.cache[model.tableName] = [];
+    res.forEach((el: T) => {
+      this.cache[model.tableName].push(new model(el));
+    });
+    // Update Frontend
+    this.subjectMap[model.tableName].many.next(this.cache[model.tableName]);
   }
 
   /**
@@ -105,29 +160,45 @@ export class DataService {
    * @param objToCreate The front end object to be created
    */
   create<T>(model: T | any, objToCreate?: T | any) {
-    this.loadingMap[model.table] = true;
+    this.loadingMap[model.tableName] = true;
 
     const newModelObj = new model(objToCreate);
 
-    const url = `${this.endpoint}${model.table}`;
-    this.http.post(url, newModelObj)
+    const url = `${this.endpoint}${model.tableName}`;
+    this.http.post(url, newModelObj, this.httpOptions)
       .subscribe(
         (res: any) => {
-          // TODO: MAKE SURE TO UPDATE UUID
-          newModelObj.key = res.key || res.ObjectId || new String(res.id).toString() || '';
-          // Append the new object into the front end cache
-          this.cache[model.table].push(Object.assign({}, newModelObj));
-
-          this.subjectMap[model.table].many.next(this.cache[model.table]);
-          this.subjectMap[model.table].one.next(newModelObj);
-
-          this.loadingMap[model.table] = false;
+          newModelObj.key = res.key || res.ObjectId || res.id || '';
+          this.cacheAndNotifyCreated(model, newModelObj);
+          this.loadingMap[model.tableName] = false;
         },
         err => {
-          this.logger.error(err);
-          this.loadingMap[model.table] = false;
+          this.handleHttpError(err);
+          this.loadingMap[model.tableName] = false;
         }
       )
+  }
+
+  createObs<T>(model: T | any, objToCreate?: T | any): Observable<T | T[]> {
+    const newModelObj = new model(objToCreate);
+
+    const url = `${this.endpoint}${model.tableName}`;
+    return this.http.post(url, newModelObj, this.httpOptions)
+      .pipe(
+        catchError(this.handleHttpError),
+        tap((res: T[] | any) => {
+          newModelObj.key = res.key || res.ObjectId || res.id || '';
+          this.cacheAndNotifyCreated(model, newModelObj);
+        })
+      );
+  }
+
+  private cacheAndNotifyCreated<T>(model: T | any, newModelObj) {
+    // Append the new object into the front end cache
+    this.cache[model.tableName].push(Object.assign({}, newModelObj));
+
+    this.subjectMap[model.tableName].many.next(this.cache[model.tableName]);
+    this.subjectMap[model.tableName].one.next(newModelObj);
   }
 
   // TODO: 
@@ -139,24 +210,62 @@ export class DataService {
    * @param objToUpdate The front end object to be updated in the DB
    */
   update<T>(model: T | any, objToUpdate: T | any) {
+    this.loadingMap[model.tableName] = true;
+
     // Find the front end object to update in the cache
-    const localObjToUpdate: T | any = this.cache[model.table].find(el => el.key === objToUpdate.key);
-    // Copy the new object into the local object reference using Object.assign
-    Object.assign(localObjToUpdate, objToUpdate);
+    const localObjToUpdate: T | any = this.cache[model.tableName].find(el => el.key === objToUpdate.key);
+    if (!localObjToUpdate) {
+      return;
+    }
+    let copyObjToUpdate = Object.assign({}, localObjToUpdate);
+    copyObjToUpdate = Object.assign(copyObjToUpdate, objToUpdate);
 
-    // Optimistic Update Frontend
-    this.subjectMap[model.table].many.next(this.cache[model.table]);
-    this.subjectMap[model.table].one.next(localObjToUpdate);
+    if (this.isOptimistic) {
+      this.cacheAndNotifyUpdated(model, localObjToUpdate, objToUpdate);
+    }
 
-    const url = `${this.endpoint}${model.table}/${localObjToUpdate.key}`;
-    this.http.patch(url, localObjToUpdate).subscribe(
-      res => { },
+    const url = `${this.endpoint}${model.tableName}/${localObjToUpdate.key}`;
+    this.http.patch(url, localObjToUpdate, this.httpOptions).subscribe(
+      res => {
+        if (!this.isOptimistic) {
+          this.cacheAndNotifyUpdated(model, localObjToUpdate, objToUpdate);
+        }
+        this.loadingMap[model.tableName] = false;
+      },
       err => {
-        this.logger.error(err);
+        this.handleHttpError(err);
+        this.loadingMap[model.tableName] = false;
       }
     )
   }
 
+  updateObs<T>(model: T | any, objToUpdate: T | any): Observable<T[]> {
+    // Find the front end object to update in the cache
+    const localObjToUpdate: T | any = this.cache[model.tableName].find(el => el.key === objToUpdate.key);
+    if (!localObjToUpdate) {
+      return;
+    }
+    let copyObjToUpdate = Object.assign({}, localObjToUpdate);
+    copyObjToUpdate = Object.assign(copyObjToUpdate, objToUpdate);
+
+    const url = `${this.endpoint}${model.tableName}/${localObjToUpdate.key}`;
+    return this.http.patch<T[]>(url, copyObjToUpdate, this.httpOptions)
+      .pipe(
+        catchError(this.handleHttpError),
+        tap((res: T[]) => {
+          this.cacheAndNotifyUpdated(model, localObjToUpdate, objToUpdate);
+        })
+      );
+  }
+
+  private cacheAndNotifyUpdated<T>(model: T | any, localObjToUpdate: T, objToUpdate: T) {
+    // Copy the new object into the local object reference using Object.assign
+    Object.assign(localObjToUpdate, objToUpdate);
+
+    // Optimistic Update Frontend
+    this.subjectMap[model.tableName].many.next(this.cache[model.tableName]);
+    this.subjectMap[model.tableName].one.next(localObjToUpdate);
+  }
 
   // TODO: 
   // UPDATEBULK
@@ -168,25 +277,71 @@ export class DataService {
    * @param notifyOne Determine if we should just notify with an object update...
    */
   delete<T>(model: T | any, objToDelete: T | any, stopNotify?: boolean) {
-    // Remove the object to delete from the front end cache by filtering out everything that doesn't have the same key
-    this.cache[model.table] = this.cache[model.table].filter(el => el.key !== objToDelete.key);
+    this.loadingMap[model.tableName] = true;
 
     // Optimistic Update Frontend
-    if (!stopNotify) {
-      this.subjectMap[model.table].many.next(this.cache[model.table]);
-      this.subjectMap[model.table].one.next(objToDelete);
+    if (this.isOptimistic && !stopNotify) {
+      this.cacheAndNotifyDelete(model, objToDelete);
     }
 
-    const url = `${this.endpoint}${model.table}/${objToDelete.key}`;
-    this.http.delete(url, objToDelete)
+    const url = `${this.endpoint}${model.tableName}/${objToDelete.key || objToDelete.id}`;
+    this.http.delete(url, this.httpOptions)
       .subscribe(
-        res => { },
+        res => {
+          if (!this.isOptimistic && !stopNotify) { // wait for the server response before modifying the front end
+            this.cacheAndNotifyDelete(model, objToDelete);
+          }
+          this.loadingMap[model.tableName] = false;
+        },
         err => {
-          this.logger.error(err);
+          this.handleHttpError(err)
+          this.loadingMap[model.tableName] = false;
         }
       )
   }
 
+  deleteObs<T>(model: T | any, objToDelete: T | any): Observable<T[]> {
+    if (this.isOptimistic) {
+      // Optimistically Remove the object to delete from the front end cache by filtering out everything that doesn't have the same key
+      this.cache[model.tableName] = this.cache[model.tableName].filter(el => el.key !== objToDelete.key);
+    }
+
+    const url = `${this.endpoint}${model.tableName}/${objToDelete.key || objToDelete.id}`;
+    return this.http.delete<T[]>(url, this.httpOptions)
+      .pipe(
+        catchError(this.handleHttpError),
+        tap((res: T[]) => {
+          if (!this.isOptimistic) { // wait for the server response before modifying the front end
+            this.cache[model.tableName] = this.cache[model.tableName].filter(el => el.key !== objToDelete.key);
+          }
+        })
+      );
+  }
+
+  private cacheAndNotifyDelete<T>(model: T | any, objToDelete: T | any) {
+    // Remove the object to delete from the front end cache by filtering out everything that doesn't have the same key
+    this.cache[model.tableName] = this.cache[model.tableName].filter(el => el.key !== objToDelete.key);
+
+    this.subjectMap[model.tableName].many.next(this.cache[model.tableName]);
+    this.subjectMap[model.tableName].one.next(objToDelete);
+  }
+
   // TODO: 
   // DELETEBULK
+
+  private handleHttpError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error.message);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      console.error(
+        `Backend returned code ${error.status}, ` +
+        `body was: ${error.error}`);
+    }
+    // return an observable with a user-facing error message
+    return throwError(
+      'Something bad happened; please try again later.');
+  };
 }
