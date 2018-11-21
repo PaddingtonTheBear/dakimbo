@@ -1,10 +1,12 @@
-<header>
+<mat-toolbar color="primary">
   <h1>Dynamic Angular CRUD Example</h1>
-</header>
+</mat-toolbar>
 
 <main class="d-flex">
   <div id="teddyBearList" class="col-md-4">
-    <h2>Teddy Bears</h2>
+    <mat-toolbar>
+      <h2>Teddy Bears</h2>
+    </mat-toolbar>
     <mat-list>
       <mat-list-item *ngFor="let teddyBear of teddyBearList">
         {{teddyBear.name}}
@@ -12,7 +14,9 @@
     </mat-list>
   </div>
   <div id="teddyBearCompanies" class="col-md-4">
-    <h2>Teddy Bear Companies</h2>
+    <mat-toolbar>
+      <h2>Teddy Bear Companies</h2>
+    </mat-toolbar>
     <mat-list>
       <mat-list-item *ngFor="let company of teddyBearCompanies">
         {{company.name}}
@@ -20,7 +24,9 @@
     </mat-list>
   </div>
   <div id="teddyBearSellers" class="col-md-4">
-    <h2>Teddy Bear Sellers</h2>
+    <mat-toolbar>
+      <h2>Teddy Bear Sellers</h2>
+    </mat-toolbar>
     <mat-list>
       <mat-list-item *ngFor="let seller of teddyBearSellers">
         {{seller.name}}

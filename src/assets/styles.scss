@@ -11,8 +11,8 @@
 // material
 // @import "./themes/mat-theme.scss";
 // @import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
-// @import "~@angular/material/prebuilt-themes/indigo-pink.css";
-@import "~@angular/material/prebuilt-themes/pink-bluegrey.css";
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+// @import "~@angular/material/prebuilt-themes/pink-bluegrey.css";
 // @import "~@angular/material/prebuilt-themes/purple-green.css";
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 
@@ -39,9 +39,9 @@ body {
 
 // overrides
 
-div.mat-sort-header-container {
-  justify-content: center !important;
-}
+// div.mat-sort-header-container {
+//   justify-content: center !important;
+// }
 
 // .mat-list .mat-list-item,
 // .mat-nav-list .mat-list-item,

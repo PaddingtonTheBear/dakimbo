@@ -32,7 +32,7 @@ module.exports = () => {
   for (let i = 0; i < 10; i++) {
     db.TeddyBearSellers.push({
       name: Faker.name.findName(),
-      location: Faker.address.city(),
+      location: Faker.address.country(),
       dateCreated: Faker.date.past()
     });
   }
