@@ -5,7 +5,7 @@ export interface IDataBaseObj {
     /**
      * The name of the table or collection that data is stored in
      */
-    tableName: string;
+    tableName?: string;
     
     id: string;
 }

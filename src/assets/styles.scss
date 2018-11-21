@@ -1,0 +1,64 @@
+// Imports functions, variables, and mixins that are needed by other Bootstrap files
+@import "variables";
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/reboot";
+@import "~bootstrap/scss/grid";
+@import "~bootstrap/scss/utilities";
+@import "reset";
+
+// material
+// @import "./themes/mat-theme.scss";
+// @import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+// @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~@angular/material/prebuilt-themes/pink-bluegrey.css";
+// @import "~@angular/material/prebuilt-themes/purple-green.css";
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+@import "app-loading";
+
+body {
+  overflow-x: hidden;
+  overflow-y: auto;
+  // background-color: $background-color;
+  // color: white !important;
+}
+
+.main-center {
+  width: 85%;
+  height: 100%;
+  margin-top: 5rem;
+  margin-left: auto !important;
+  margin-right: 2rem;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+// overrides
+
+div.mat-sort-header-container {
+  justify-content: center !important;
+}
+
+// .mat-list .mat-list-item,
+// .mat-nav-list .mat-list-item,
+// .mat-selection-list .mat-list-item,
+// .mat-expansion-panel-header-title,
+// .mat-card-subtitle,
+// .mat-panel-description,
+// .mat-select-value,
+// pre {
+//   color: white;
+// }
+
+// .mat-card,
+// .mat-toolbar,
+// .mat-expansion-panel,
+// .mat-paginator {
+//   background-color: $background-color;
+//   color: white;
+//   // box-shadow: 0px 2px 1px -1px rgba(255, 255, 255, 0.2), 0px 1px 1px 0px rgba(255, 255, 255, 0.14), 0px 1px 3px 0px rgba(255, 255, 255, 0.12)
+// }

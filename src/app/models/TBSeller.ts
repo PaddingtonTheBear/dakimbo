@@ -1,3 +1,4 @@
+import { TableMap } from './../shared/table-map';
 import { IDataBaseObj } from './_base';
 
 export interface ITBSeller extends IDataBaseObj {
@@ -7,7 +8,7 @@ export interface ITBSeller extends IDataBaseObj {
 }
 
 export class TBSeller implements ITBSeller {
-    tableName: string = 'TeddyBearSellers';
+    static tableName: string = TableMap.TBCompanies;
 
     id: string;
 

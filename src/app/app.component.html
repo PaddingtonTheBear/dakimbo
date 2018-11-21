@@ -2,26 +2,29 @@
   <h1>Dynamic Angular CRUD Example</h1>
 </header>
 
-<main class="flex">
-  <div id="teddyBearList" class="w-33">
-    <ul class="bear-list">
-      <li *ngFor="let teddyBear of teddyBearList">
+<main class="d-flex">
+  <div id="teddyBearList" class="col-md-4">
+    <h2>Teddy Bears</h2>
+    <mat-list>
+      <mat-list-item *ngFor="let teddyBear of teddyBearList">
         {{teddyBear.name}}
-      </li>
-    </ul>
+      </mat-list-item>
+    </mat-list>
   </div>
-  <div id="teddyBearCompanies" class="w-33">
-    <ul class="bear-list">
-      <li *ngFor="let company of teddyBearCompanies">
+  <div id="teddyBearCompanies" class="col-md-4">
+    <h2>Teddy Bear Companies</h2>
+    <mat-list>
+      <mat-list-item *ngFor="let company of teddyBearCompanies">
         {{company.name}}
-      </li>
-    </ul>
+      </mat-list-item>
+    </mat-list>
   </div>
-  <div id="teddyBearSellers" class="w-33">
-    <ul class="bear-list">
-      <li *ngFor="let seller of teddyBearSellers">
+  <div id="teddyBearSellers" class="col-md-4">
+    <h2>Teddy Bear Sellers</h2>
+    <mat-list>
+      <mat-list-item *ngFor="let seller of teddyBearSellers">
         {{seller.name}}
-      </li>
-    </ul>
+      </mat-list-item>
+    </mat-list>
   </div>
 </main>

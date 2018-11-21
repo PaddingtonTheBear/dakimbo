@@ -1,4 +1,5 @@
 import { IDataBaseObj } from './_base';
+import { TableMap } from '../shared/table-map';
 
 export interface ITeddyBear extends IDataBaseObj {
     name?: string;
@@ -12,7 +13,7 @@ export interface ITeddyBear extends IDataBaseObj {
 }
 
 export class TeddyBear implements ITeddyBear {
-    tableName: string = 'TeddyBears';
+    static tableName: string = TableMap.TeddyBears;
 
     id: string;
 
