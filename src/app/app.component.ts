@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { forkJoin } from 'rxjs';
 
-import { TBCompany } from './models/TBCompany';
-import { TBSeller } from './models/TBSeller';
-import { TeddyBear } from './models/TeddyBear';
+import { Company } from './models/Company';
+import { Seller } from './models/Seller';
+import { Product } from './models/Product';
 import { DataService } from './shared/data.service';
 
 @Component({
@@ -12,9 +12,9 @@ import { DataService } from './shared/data.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  teddyBearList: TeddyBear[] = [];
-  teddyBearCompanies: TBCompany[] = [];
-  teddyBearSellers: TBSeller[] = [];
+  products: Product[] = [];
+  companies: Company[] = [];
+  sellers: Seller[] = [];
 
   title = 'dynamic-angular-crud';
 
@@ -23,16 +23,16 @@ export class AppComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const tbListObs = this.ds.readObs(TeddyBear);
-    const tbCompObs = this.ds.readObs(TBCompany);
-    const tbSellObs = this.ds.readObs(TBSeller);
+    const productObs = this.ds.readObs(Product);
+    const companyObs = this.ds.readObs(Company);
+    const sellerObs = this.ds.readObs(Seller);
 
-    forkJoin([tbListObs, tbCompObs, tbSellObs])
+    forkJoin([productObs, companyObs, sellerObs])
       .subscribe(
         (res: any) => {
-          this.teddyBearList = res[0];
-          this.teddyBearCompanies = res[1];
-          this.teddyBearSellers = res[2];
+          this.products = res[0];
+          this.companies = res[1];
+          this.sellers = res[2];
         },
         err => console.error(err)
       )

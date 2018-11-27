@@ -3,32 +3,32 @@
 </mat-toolbar>
 
 <main class="d-flex">
-  <div id="teddyBearList" class="col-md-4">
+  <div id="productList" class="col-md-4">
     <mat-toolbar>
-      <h2>Teddy Bears</h2>
+      <h2>Products</h2>
     </mat-toolbar>
     <mat-list>
-      <mat-list-item *ngFor="let teddyBear of teddyBearList">
-        {{teddyBear.name}}
+      <mat-list-item *ngFor="let product of products">
+        {{product.name}}
       </mat-list-item>
     </mat-list>
   </div>
-  <div id="teddyBearCompanies" class="col-md-4">
+  <div id="companyList" class="col-md-4">
     <mat-toolbar>
-      <h2>Teddy Bear Companies</h2>
+      <h2>Companies</h2>
     </mat-toolbar>
     <mat-list>
-      <mat-list-item *ngFor="let company of teddyBearCompanies">
+      <mat-list-item *ngFor="let company of companies">
         {{company.name}}
       </mat-list-item>
     </mat-list>
   </div>
-  <div id="teddyBearSellers" class="col-md-4">
+  <div id="sellerList" class="col-md-4">
     <mat-toolbar>
-      <h2>Teddy Bear Sellers</h2>
+      <h2>Sellers</h2>
     </mat-toolbar>
     <mat-list>
-      <mat-list-item *ngFor="let seller of teddyBearSellers">
+      <mat-list-item *ngFor="let seller of sellers">
         {{seller.name}}
       </mat-list-item>
     </mat-list>
