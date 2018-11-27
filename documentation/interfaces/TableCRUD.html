@@ -61,7 +61,7 @@
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/app/shared/data.service.ts</code>
+            <code>src/app/shared/crud-service/data.service.ts</code>
         </p>
 
             <p class="comment">
@@ -197,48 +197,16 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from &#x27;@angular/common/http&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { HttpClient, HttpHeaders, HttpParams } from &#x27;@angular/common/http&#x27;;
 import { Injectable } from &#x27;@angular/core&#x27;;
-import { Observable, Subject, throwError } from &#x27;rxjs&#x27;;
-import { catchError, tap } from &#x27;rxjs/operators&#x27;;
+import { Observable, Subject } from &#x27;rxjs&#x27;;
 
-import { environment } from &#x27;./../../environments/environment&#x27;;
-import { TableMap } from &#x27;./table-map&#x27;;
-
-/**
- * A mapping of every environment defined DB table to a subject so that CRUD applications can send notifications to all subject subscribers
- * Components can subscribe to the &quot;many&quot; subject to receive an array of new objects, or to the &quot;one&quot; subject to get a single object
- * TODO: Spread this into an individual CRUD subject for each table
- */
-interface SubjectMap {
-  [tableName: string]: {
-    many: Subject&lt;any[]&gt;;
-    one: Subject&lt;any&gt;;
-  }
-}
-
-/**
- * A mapping of every DB table to a load boolean so that external components can wait for a table&#x27;s data to be loaded
- */
-interface LoadingMap {
-  [tableName: string]: boolean
-}
-
-/**
- * A simple cache which is an object whose properties is a table name with an array of that table&#x27;s data loaded into the front end
- */
-interface Cache {
-  [tableName: string]: any[]
-}
-
-/**
- * An interface for what we expect to be used for dynamic Table CRUD
- */
-interface TableCRUD {
-  cache: Cache;
-  subjectMap: SubjectMap;
-  loadingMap: LoadingMap;
-}
+import { environment } from &#x27;../../../environments/environment&#x27;;
+import { TableMap } from &#x27;../table-map&#x27;;
+import { DataCreate } from &#x27;./_create&#x27;;
+import { DataDelete } from &#x27;./_delete&#x27;;
+import { DataRead } from &#x27;./_read&#x27;;
+import { DataUpdate } from &#x27;./_update&#x27;;
 
 @Injectable({
   providedIn: &#x27;root&#x27;
@@ -266,8 +234,21 @@ export class DataService {
   loadingMap: LoadingMap &#x3D; {};
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private DC: DataCreate,
+    private DR: DataRead,
+    private DU: DataUpdate,
+    private DD: DataDelete
   ) {
+    this.DC.setDataService(this);
+    this.DR.setDataService(this);
+    this.DU.setDataService(this);
+    this.DD.setDataService(this);
+
+    this.setupLocalProps();
+  }
+
+  private setupLocalProps() {
     // TODO: Figure out how to make a subject with the correct TS model based on the table name
     Object.keys(TableMap).forEach(tableName &#x3D;&gt; {
       this.loadingMap[TableMap[tableName]] &#x3D; false;
@@ -275,276 +256,101 @@ export class DataService {
       this.subjectMap[TableMap[tableName]] &#x3D; {
         many: new Subject&lt;any[]&gt;(),
         one: new Subject&lt;any&gt;()
-      }
+      };
     });
   }
 
   /**
-   * Using a model interface&#x27;s table definition, do a HTTP get
-   * @param model The interface / class to construct the query against and build response objects from
-   * @param query A limiting query to apply to the get. Expects an object of type URLSearchParams to append to the read, or a simple string
+   * PUBLIC API
    */
-  read&lt;T&gt;(model: T | any, query?: HttpParams | String) {
-    this.loadingMap[model.tableName] &#x3D; true;
 
-    const httpOpts &#x3D; Object.assign({}, this.httpOptions);
-
-    if (query) {
-      httpOpts.params &#x3D; this.createSearchParams(query);
-    }
-
-    const url &#x3D; &#x60;${this.endpoint}${model.tableName}&#x60;;
-    this.http.get&lt;any[]&gt;(url, httpOpts)
-      .subscribe(
-        res &#x3D;&gt; {
-          this.cacheAndNotifyRead(model, res);
-          this.loadingMap[model.tableName] &#x3D; false;
-        },
-        err &#x3D;&gt; {
-          this.handleHttpError(err);
-          this.loadingMap[model.tableName] &#x3D; false;
-        }
-      );
-  }
-
-  readObs&lt;T&gt;(model: T | any, query?: HttpParams | String): Observable&lt;T[]&gt; {
-    this.loadingMap[model.tableName] &#x3D; true;
-
-    const httpOpts &#x3D; Object.assign({}, this.httpOptions);
-
-    if (query) {
-      httpOpts.params &#x3D; this.createSearchParams(query);
-    }
-
-    const url &#x3D; &#x60;${this.endpoint}${model.tableName}&#x60;;
-    return this.http.get&lt;T[]&gt;(url, httpOpts)
-      .pipe(
-        catchError(this.handleHttpError),
-        tap((res: T[]) &#x3D;&gt; {
-          this.cacheAndNotifyRead(model, res);
-        })
-      );
-  }
-
-  private createSearchParams(query: HttpParams | String): HttpParams {
-    let newParams &#x3D; new HttpParams;
-
-    if (query instanceof String) {
-      const searchParams &#x3D; new HttpParams();
-      const splitQuery &#x3D; query.split(&#x27;&amp;&#x27;);
-      splitQuery.forEach(param &#x3D;&gt; {
-        const keyValPair &#x3D; param.split(&#x27;&#x3D;&#x27;);
-        searchParams.set(keyValPair[0], keyValPair[1]);
-      });
-      newParams &#x3D; searchParams;
-    } else {
-      newParams &#x3D; query;
-    }
-
-    return newParams;
-  }
-
-  private cacheAndNotifyRead&lt;T&gt;(model: T | any, res: T[]) {
-    this.cache[model.tableName] &#x3D; [];
-    res.forEach((el: T) &#x3D;&gt; {
-      this.cache[model.tableName].push(new model(el));
-    });
-    // Update Frontend
-    this.subjectMap[model.tableName].many.next(this.cache[model.tableName]);
-  }
-
-  /**
-   * Create a new object in the database using a front end defined object; will need to wait for the post resolution to get the DB generated UUID assigned to the front end key
-   * @param model The interface / class to construct the query against and build response objects from
-   * @param objToCreate The front end object to be created
-   */
+  // CREATE
   create&lt;T&gt;(model: T | any, objToCreate?: T | any) {
-    this.loadingMap[model.tableName] &#x3D; true;
-
-    const newModelObj &#x3D; new model(objToCreate);
-
-    const url &#x3D; &#x60;${this.endpoint}${model.tableName}&#x60;;
-    this.http.post(url, newModelObj, this.httpOptions)
-      .subscribe(
-        (res: any) &#x3D;&gt; {
-          newModelObj.key &#x3D; res.key || res.ObjectId || res.id || &#x27;&#x27;;
-          this.cacheAndNotifyCreated(model, newModelObj);
-          this.loadingMap[model.tableName] &#x3D; false;
-        },
-        err &#x3D;&gt; {
-          this.handleHttpError(err);
-          this.loadingMap[model.tableName] &#x3D; false;
-        }
-      )
+    this.DC.create(model, objToCreate);
   }
 
   createObs&lt;T&gt;(model: T | any, objToCreate?: T | any): Observable&lt;T | T[]&gt; {
-    const newModelObj &#x3D; new model(objToCreate);
-
-    const url &#x3D; &#x60;${this.endpoint}${model.tableName}&#x60;;
-    return this.http.post(url, newModelObj, this.httpOptions)
-      .pipe(
-        catchError(this.handleHttpError),
-        tap((res: T[] | any) &#x3D;&gt; {
-          newModelObj.key &#x3D; res.key || res.ObjectId || res.id || &#x27;&#x27;;
-          this.cacheAndNotifyCreated(model, newModelObj);
-        })
-      );
+    return this.DC.createObs(model, objToCreate);
   }
 
-  private cacheAndNotifyCreated&lt;T&gt;(model: T | any, newModelObj) {
-    // Append the new object into the front end cache
-    this.cache[model.tableName].push(Object.assign({}, newModelObj));
-
-    this.subjectMap[model.tableName].many.next(this.cache[model.tableName]);
-    this.subjectMap[model.tableName].one.next(newModelObj);
+  createPromise&lt;T&gt;(model: T | any, objToCreate: T | any): Promise&lt;T | any&gt; {
+    return this.DC.createPromise(model, objToCreate);
   }
 
-  // TODO: 
-  // CREATEBULK
+  // READ
+  read&lt;T&gt;(model: T | any, query?: HttpParams | String) {
+    this.DR.read(model, query);
+  }
 
-  /**
-   * Update a front end object&#x27;s values into the database
-   * @param model The interface / class to construct the query against and build response objects from
-   * @param objToUpdate The front end object to be updated in the DB
-   */
+  readObs&lt;T&gt;(model: T | any, query?: HttpParams | String): Observable&lt;T[]&gt; {
+    return this.DR.readObs(model, query);
+  }
+
+  readPromise&lt;T&gt;(model: T | any, query?: HttpParams | String): Promise&lt;T | any&gt; {
+    return this.DR.readPromise(model, query);
+  }
+
+  // UPDATE
   update&lt;T&gt;(model: T | any, objToUpdate: T | any) {
-    this.loadingMap[model.tableName] &#x3D; true;
-
-    // Find the front end object to update in the cache
-    const localObjToUpdate: T | any &#x3D; this.cache[model.tableName].find(el &#x3D;&gt; el.key &#x3D;&#x3D;&#x3D; objToUpdate.key);
-    if (!localObjToUpdate) {
-      return;
-    }
-    let copyObjToUpdate &#x3D; Object.assign({}, localObjToUpdate);
-    copyObjToUpdate &#x3D; Object.assign(copyObjToUpdate, objToUpdate);
-
-    if (this.isOptimistic) {
-      this.cacheAndNotifyUpdated(model, localObjToUpdate, objToUpdate);
-    }
-
-    const url &#x3D; &#x60;${this.endpoint}${model.tableName}/${localObjToUpdate.key}&#x60;;
-    this.http.patch(url, localObjToUpdate, this.httpOptions).subscribe(
-      res &#x3D;&gt; {
-        if (!this.isOptimistic) {
-          this.cacheAndNotifyUpdated(model, localObjToUpdate, objToUpdate);
-        }
-        this.loadingMap[model.tableName] &#x3D; false;
-      },
-      err &#x3D;&gt; {
-        this.handleHttpError(err);
-        this.loadingMap[model.tableName] &#x3D; false;
-      }
-    )
+    this.DU.update(model, objToUpdate);
   }
 
   updateObs&lt;T&gt;(model: T | any, objToUpdate: T | any): Observable&lt;T[]&gt; {
-    // Find the front end object to update in the cache
-    const localObjToUpdate: T | any &#x3D; this.cache[model.tableName].find(el &#x3D;&gt; el.key &#x3D;&#x3D;&#x3D; objToUpdate.key);
-    if (!localObjToUpdate) {
-      return;
-    }
-    let copyObjToUpdate &#x3D; Object.assign({}, localObjToUpdate);
-    copyObjToUpdate &#x3D; Object.assign(copyObjToUpdate, objToUpdate);
-
-    const url &#x3D; &#x60;${this.endpoint}${model.tableName}/${localObjToUpdate.key}&#x60;;
-    return this.http.patch&lt;T[]&gt;(url, copyObjToUpdate, this.httpOptions)
-      .pipe(
-        catchError(this.handleHttpError),
-        tap((res: T[]) &#x3D;&gt; {
-          this.cacheAndNotifyUpdated(model, localObjToUpdate, objToUpdate);
-        })
-      );
+    return this.DU.updateObs(model, objToUpdate);
   }
 
-  private cacheAndNotifyUpdated&lt;T&gt;(model: T | any, localObjToUpdate: T, objToUpdate: T) {
-    // Copy the new object into the local object reference using Object.assign
-    Object.assign(localObjToUpdate, objToUpdate);
-
-    // Optimistic Update Frontend
-    this.subjectMap[model.tableName].many.next(this.cache[model.tableName]);
-    this.subjectMap[model.tableName].one.next(localObjToUpdate);
+  updatePromise&lt;T&gt;(model: T | any, objToUpdate: T | any): Promise&lt;T | any&gt; {
+    return this.DU.updatePromise(model, objToUpdate);
   }
 
-  // TODO: 
-  // UPDATEBULK
-
-  /**
-   * Delete a front end object fron the database
-   * @param model The interface / class to construct the query against and build response objects from
-   * @param objToDelete The front end object to be deleted in the DB
-   * @param notifyOne Determine if we should just notify with an object update...
-   */
+  // DELETE
   delete&lt;T&gt;(model: T | any, objToDelete: T | any, stopNotify?: boolean) {
-    this.loadingMap[model.tableName] &#x3D; true;
-
-    // Optimistic Update Frontend
-    if (this.isOptimistic &amp;&amp; !stopNotify) {
-      this.cacheAndNotifyDelete(model, objToDelete);
-    }
-
-    const url &#x3D; &#x60;${this.endpoint}${model.tableName}/${objToDelete.key || objToDelete.id}&#x60;;
-    this.http.delete(url, this.httpOptions)
-      .subscribe(
-        res &#x3D;&gt; {
-          if (!this.isOptimistic &amp;&amp; !stopNotify) { // wait for the server response before modifying the front end
-            this.cacheAndNotifyDelete(model, objToDelete);
-          }
-          this.loadingMap[model.tableName] &#x3D; false;
-        },
-        err &#x3D;&gt; {
-          this.handleHttpError(err)
-          this.loadingMap[model.tableName] &#x3D; false;
-        }
-      )
+    this.DD.delete(model, objToDelete, stopNotify);
   }
-
+  
   deleteObs&lt;T&gt;(model: T | any, objToDelete: T | any): Observable&lt;T[]&gt; {
-    if (this.isOptimistic) {
-      // Optimistically Remove the object to delete from the front end cache by filtering out everything that doesn&#x27;t have the same key
-      this.cache[model.tableName] &#x3D; this.cache[model.tableName].filter(el &#x3D;&gt; el.key !&#x3D;&#x3D; objToDelete.key);
-    }
-
-    const url &#x3D; &#x60;${this.endpoint}${model.tableName}/${objToDelete.key || objToDelete.id}&#x60;;
-    return this.http.delete&lt;T[]&gt;(url, this.httpOptions)
-      .pipe(
-        catchError(this.handleHttpError),
-        tap((res: T[]) &#x3D;&gt; {
-          if (!this.isOptimistic) { // wait for the server response before modifying the front end
-            this.cache[model.tableName] &#x3D; this.cache[model.tableName].filter(el &#x3D;&gt; el.key !&#x3D;&#x3D; objToDelete.key);
-          }
-        })
-      );
+    return this.DD.deleteObs(model, objToDelete);
   }
-
-  private cacheAndNotifyDelete&lt;T&gt;(model: T | any, objToDelete: T | any) {
-    // Remove the object to delete from the front end cache by filtering out everything that doesn&#x27;t have the same key
-    this.cache[model.tableName] &#x3D; this.cache[model.tableName].filter(el &#x3D;&gt; el.key !&#x3D;&#x3D; objToDelete.key);
-
-    this.subjectMap[model.tableName].many.next(this.cache[model.tableName]);
-    this.subjectMap[model.tableName].one.next(objToDelete);
+  
+  deletePromise&lt;T&gt;(model: T | any, objToDelete: T | any): Promise&lt;T | any&gt; {
+    return this.DD.deletePromise(model, objToDelete);
   }
+}
 
-  // TODO: 
-  // DELETEBULK
-
-  private handleHttpError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
-      console.error(&#x27;An error occurred:&#x27;, error.error.message);
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
-      console.error(
-        &#x60;Backend returned code ${error.status}, &#x60; +
-        &#x60;body was: ${error.error}&#x60;);
-    }
-    // return an observable with a user-facing error message
-    return throwError(
-      &#x27;Something bad happened; please try again later.&#x27;);
+/**
+ * A mapping of every environment defined DB table to a subject so that CRUD applications can send notifications to all subject subscribers
+ * Components can subscribe to the &quot;many&quot; subject to receive an array of new objects, or to the &quot;one&quot; subject to get a single object
+ * TODO: Investigate and Spread this into an individual CRUD subject for each table
+ */
+interface SubjectMap {
+  [tableName: string]: {
+    many: Subject&lt;any[]&gt;;
+    one: Subject&lt;any&gt;;
   };
 }
-</code></pre>
+
+/**
+ * A mapping of every DB table to a load boolean so that external components can wait for a table&#x27;s data to be loaded
+ */
+interface LoadingMap {
+  [tableName: string]: boolean;
+}
+
+/**
+ * A simple cache which is an object whose properties is a table name with an array of that table&#x27;s data loaded into the front end
+ */
+interface Cache {
+  [tableName: string]: any[];
+}
+
+/**
+ * An interface for what we expect to be used for dynamic Table CRUD
+ */
+interface TableCRUD {
+  cache: Cache;
+  subjectMap: SubjectMap;
+  loadingMap: LoadingMap;
+}</code></pre>
     </div>
 </div>
 

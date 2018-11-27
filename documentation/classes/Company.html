@@ -42,7 +42,7 @@
 
 <ol class="breadcrumb">
   <li>Classes</li>
-  <li>TBCompany</li>
+  <li>Company</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -60,7 +60,7 @@
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/app/models/TBCompany.ts</code>
+            <code>src/app/models/Company.ts</code>
         </p>
 
 
@@ -69,7 +69,7 @@
                 <h3>Implements</h3>
             </p>
             <p class="comment">
-                        <code><a href="../interfaces/ITBCompany.html" target="_self" >ITBCompany</a></code>
+                        <code><a href="../interfaces/ICompany.html" target="_self" >ICompany</a></code>
             </p>
 
 
@@ -123,12 +123,12 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(props: <a href="../interfaces/ITBCompany.html">ITBCompany</a>)</code>
+<code>constructor(props: <a href="../interfaces/ICompany.html">ICompany</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">src/app/models/TBCompany.ts:17</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">src/app/models/Company.ts:17</a></div>
                             </td>
                         </tr>
 
@@ -149,7 +149,7 @@
                                                         <td>props</td>
                                                   
                                                         <td>
-                                                                    <code><a href="../interfaces/ITBCompany.html" target="_self" >ITBCompany</a></code>
+                                                                    <code><a href="../interfaces/ICompany.html" target="_self" >ICompany</a></code>
                                                         </td>
                                                   
                                                     <td>
@@ -199,7 +199,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">src/app/models/TBCompany.ts:17</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">src/app/models/Company.ts:17</a></div>
                             </td>
                         </tr>
 
@@ -233,7 +233,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="13" class="link-to-prism">src/app/models/TBCompany.ts:13</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="13" class="link-to-prism">src/app/models/Company.ts:13</a></div>
                             </td>
                         </tr>
 
@@ -268,7 +268,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/app/models/TBCompany.ts:16</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/app/models/Company.ts:16</a></div>
                             </td>
                         </tr>
 
@@ -303,7 +303,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="15" class="link-to-prism">src/app/models/TBCompany.ts:15</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="15" class="link-to-prism">src/app/models/Company.ts:15</a></div>
                             </td>
                         </tr>
 
@@ -338,12 +338,12 @@
                     </tr>
                     <tr>
                         <td class="col-md-4">
-                            <i>Default value : </i><code>TableMap.TBCompanies</code>
+                            <i>Default value : </i><code>TableMap.Companies</code>
                         </td>
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">src/app/models/TBCompany.ts:11</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">src/app/models/Company.ts:11</a></div>
                             </td>
                         </tr>
 
@@ -365,14 +365,14 @@
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { TableMap } from &#x27;./../shared/table-map&#x27;;
 import { IDataBaseObj } from &#x27;./_base&#x27;;
 
-export interface ITBCompany extends IDataBaseObj {
+export interface ICompany extends IDataBaseObj {
     name?: string;
     location?: string;
     dateCreated?: Date;
 }
 
-export class TBCompany implements ITBCompany {
-    static tableName: string &#x3D; TableMap.TBCompanies;
+export class Company implements ICompany {
+    static tableName: string &#x3D; TableMap.Companies;
 
     id: string;
 
@@ -380,7 +380,7 @@ export class TBCompany implements ITBCompany {
     location?: string;
     dateCreated?: Date;
 
-    constructor(props: ITBCompany) {
+    constructor(props: ICompany) {
         Object.keys(props).forEach(prop &#x3D;&gt; {
             const value &#x3D; props[prop];
             this[prop] &#x3D; value;
@@ -413,7 +413,7 @@ export class TBCompany implements ITBCompany {
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'class';
-            var COMPODOC_CURRENT_PAGE_URL = 'TBCompany.html';
+            var COMPODOC_CURRENT_PAGE_URL = 'Company.html';
        </script>
 
        <script src="../js/libs/custom-elements.min.js"></script>

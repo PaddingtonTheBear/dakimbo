@@ -1,10 +1,11 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { MaterialModule } from './material.module';
-import { DataService } from './shared/data.service';
+import { CrudServiceModule } from './shared/crud-service/crud-service.module';
 
 @NgModule({
   declarations: [
@@ -12,11 +13,12 @@ import { DataService } from './shared/data.service';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
-    MaterialModule
+    MaterialModule,
+    CrudServiceModule
   ],
   providers: [
-    DataService
   ],
   bootstrap: [AppComponent]
 })

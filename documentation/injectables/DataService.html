@@ -56,7 +56,7 @@
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/app/shared/data.service.ts</code>
+            <code>src/app/shared/crud-service/data.service.ts</code>
         </p>
 
 
@@ -104,30 +104,13 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
-                                    <span class="modifier">Private</span>
-                                <a href="#cacheAndNotifyCreated">cacheAndNotifyCreated</a>
-                            </li>
-                            <li>
-                                    <span class="modifier">Private</span>
-                                <a href="#cacheAndNotifyDelete">cacheAndNotifyDelete</a>
-                            </li>
-                            <li>
-                                    <span class="modifier">Private</span>
-                                <a href="#cacheAndNotifyRead">cacheAndNotifyRead</a>
-                            </li>
-                            <li>
-                                    <span class="modifier">Private</span>
-                                <a href="#cacheAndNotifyUpdated">cacheAndNotifyUpdated</a>
-                            </li>
-                            <li>
                                 <a href="#create">create</a>
                             </li>
                             <li>
                                 <a href="#createObs">createObs</a>
                             </li>
                             <li>
-                                    <span class="modifier">Private</span>
-                                <a href="#createSearchParams">createSearchParams</a>
+                                <a href="#createPromise">createPromise</a>
                             </li>
                             <li>
                                 <a href="#delete">delete</a>
@@ -136,8 +119,7 @@
                                 <a href="#deleteObs">deleteObs</a>
                             </li>
                             <li>
-                                    <span class="modifier">Private</span>
-                                <a href="#handleHttpError">handleHttpError</a>
+                                <a href="#deletePromise">deletePromise</a>
                             </li>
                             <li>
                                 <a href="#read">read</a>
@@ -146,10 +128,20 @@
                                 <a href="#readObs">readObs</a>
                             </li>
                             <li>
+                                <a href="#readPromise">readPromise</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#setupLocalProps">setupLocalProps</a>
+                            </li>
+                            <li>
                                 <a href="#update">update</a>
                             </li>
                             <li>
                                 <a href="#updateObs">updateObs</a>
+                            </li>
+                            <li>
+                                <a href="#updatePromise">updatePromise</a>
                             </li>
                         </ul>
                     </td>
@@ -169,12 +161,12 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(http: <a href="https://angular.io/api/common/http/HttpClient" target="_blank">HttpClient</a>)</code>
+<code>constructor(http: <a href="https://angular.io/api/common/http/HttpClient" target="_blank">HttpClient</a>, DC: <a href="../injectables/DataCreate.html">DataCreate</a>, DR: <a href="../injectables/DataRead.html">DataRead</a>, DU: <a href="../injectables/DataUpdate.html">DataUpdate</a>, DD: <a href="../injectables/DataDelete.html">DataDelete</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="67" class="link-to-prism">src/app/shared/data.service.ts:67</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/shared/crud-service/data.service.ts:35</a></div>
                             </td>
                         </tr>
 
@@ -203,6 +195,54 @@
                                                     </td>
                                                     
                                                 </tr>
+                                                <tr>
+                                                        <td>DC</td>
+                                                  
+                                                        <td>
+                                                                    <code><a href="../injectables/DataCreate.html" target="_self" >DataCreate</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>DR</td>
+                                                  
+                                                        <td>
+                                                                    <code><a href="../injectables/DataRead.html" target="_self" >DataRead</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>DU</td>
+                                                  
+                                                        <td>
+                                                                    <code><a href="../injectables/DataUpdate.html" target="_self" >DataUpdate</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>DD</td>
+                                                  
+                                                        <td>
+                                                                    <code><a href="../injectables/DataDelete.html" target="_self" >DataDelete</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
                                         </tbody>
                                     </table>
                             </div>
@@ -217,381 +257,6 @@
         <h3 id="methods">
             Methods
         </h3>
-        <table class="table table-sm table-bordered">
-            <tbody>
-                <tr>
-                    <td class="col-md-4">
-                        <a name="cacheAndNotifyCreated"></a>
-                        <span class="name">
-                            <b>
-                                <span class="modifier">Private</span>
-                            cacheAndNotifyCreated
-                            </b>
-                            <a href="#cacheAndNotifyCreated"><span class="icon ion-ios-link"></span></a>
-                        </span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col-md-4">
-                            <span class="modifier-icon icon ion-ios-reset"></span>
-                        <code>cacheAndNotifyCreated(model: T | any, newModelObj)</code>
-                    </td>
-                </tr>
-
-
-                        <tr>
-                            <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="196" class="link-to-prism">src/app/shared/data.service.ts:196</a></div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td class="col-md-4">
-                                <b>Type parameters :</b>
-                                <ul class="type-parameters">
-                                        <li>T</li>
-                                </ul>
-                            </td>
-                        </tr>
-
-                <tr>
-                    <td class="col-md-4">
-
-                            <div class="io-description">
-                                    <b>Parameters :</b>
-                                    <table class="params">
-                                        <thead>
-                                            <tr>
-                                                <td>Name</td>
-                                                    <td>Type</td>
-                                                <td>Optional</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                                <tr>
-                                                        <td>model</td>
-                                                        <td>
-                                                                    <code>T | any</code>
-                                                        </td>
-                                                    
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-
-                                                </tr>
-                                                <tr>
-                                                        <td>newModelObj</td>
-                                                        <td>
-                                                        </td>
-                                                    
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-
-                                                </tr>
-                                        </tbody>
-                                    </table>
-                            </div>
-                            <div>
-                            </div>
-                            <div class="io-description">
-                                <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
-
-                            </div>
-                                <div class="io-description">
-                                    
-                                </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <table class="table table-sm table-bordered">
-            <tbody>
-                <tr>
-                    <td class="col-md-4">
-                        <a name="cacheAndNotifyDelete"></a>
-                        <span class="name">
-                            <b>
-                                <span class="modifier">Private</span>
-                            cacheAndNotifyDelete
-                            </b>
-                            <a href="#cacheAndNotifyDelete"><span class="icon ion-ios-link"></span></a>
-                        </span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col-md-4">
-                            <span class="modifier-icon icon ion-ios-reset"></span>
-                        <code>cacheAndNotifyDelete(model: T | any, objToDelete: T | any)</code>
-                    </td>
-                </tr>
-
-
-                        <tr>
-                            <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="321" class="link-to-prism">src/app/shared/data.service.ts:321</a></div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td class="col-md-4">
-                                <b>Type parameters :</b>
-                                <ul class="type-parameters">
-                                        <li>T</li>
-                                </ul>
-                            </td>
-                        </tr>
-
-                <tr>
-                    <td class="col-md-4">
-
-                            <div class="io-description">
-                                    <b>Parameters :</b>
-                                    <table class="params">
-                                        <thead>
-                                            <tr>
-                                                <td>Name</td>
-                                                    <td>Type</td>
-                                                <td>Optional</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                                <tr>
-                                                        <td>model</td>
-                                                        <td>
-                                                                    <code>T | any</code>
-                                                        </td>
-                                                    
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-
-                                                </tr>
-                                                <tr>
-                                                        <td>objToDelete</td>
-                                                        <td>
-                                                                    <code>T | any</code>
-                                                        </td>
-                                                    
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-
-                                                </tr>
-                                        </tbody>
-                                    </table>
-                            </div>
-                            <div>
-                            </div>
-                            <div class="io-description">
-                                <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
-
-                            </div>
-                                <div class="io-description">
-                                    
-                                </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <table class="table table-sm table-bordered">
-            <tbody>
-                <tr>
-                    <td class="col-md-4">
-                        <a name="cacheAndNotifyRead"></a>
-                        <span class="name">
-                            <b>
-                                <span class="modifier">Private</span>
-                            cacheAndNotifyRead
-                            </b>
-                            <a href="#cacheAndNotifyRead"><span class="icon ion-ios-link"></span></a>
-                        </span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col-md-4">
-                            <span class="modifier-icon icon ion-ios-reset"></span>
-                        <code>cacheAndNotifyRead(model: T | any, res: T[])</code>
-                    </td>
-                </tr>
-
-
-                        <tr>
-                            <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="148" class="link-to-prism">src/app/shared/data.service.ts:148</a></div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td class="col-md-4">
-                                <b>Type parameters :</b>
-                                <ul class="type-parameters">
-                                        <li>T</li>
-                                </ul>
-                            </td>
-                        </tr>
-
-                <tr>
-                    <td class="col-md-4">
-
-                            <div class="io-description">
-                                    <b>Parameters :</b>
-                                    <table class="params">
-                                        <thead>
-                                            <tr>
-                                                <td>Name</td>
-                                                    <td>Type</td>
-                                                <td>Optional</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                                <tr>
-                                                        <td>model</td>
-                                                        <td>
-                                                                    <code>T | any</code>
-                                                        </td>
-                                                    
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-
-                                                </tr>
-                                                <tr>
-                                                        <td>res</td>
-                                                        <td>
-                                                                    <code>T[]</code>
-                                                        </td>
-                                                    
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-
-                                                </tr>
-                                        </tbody>
-                                    </table>
-                            </div>
-                            <div>
-                            </div>
-                            <div class="io-description">
-                                <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
-
-                            </div>
-                                <div class="io-description">
-                                    
-                                </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <table class="table table-sm table-bordered">
-            <tbody>
-                <tr>
-                    <td class="col-md-4">
-                        <a name="cacheAndNotifyUpdated"></a>
-                        <span class="name">
-                            <b>
-                                <span class="modifier">Private</span>
-                            cacheAndNotifyUpdated
-                            </b>
-                            <a href="#cacheAndNotifyUpdated"><span class="icon ion-ios-link"></span></a>
-                        </span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col-md-4">
-                            <span class="modifier-icon icon ion-ios-reset"></span>
-                        <code>cacheAndNotifyUpdated(model: T | any, localObjToUpdate: T, objToUpdate: T)</code>
-                    </td>
-                </tr>
-
-
-                        <tr>
-                            <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="261" class="link-to-prism">src/app/shared/data.service.ts:261</a></div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td class="col-md-4">
-                                <b>Type parameters :</b>
-                                <ul class="type-parameters">
-                                        <li>T</li>
-                                </ul>
-                            </td>
-                        </tr>
-
-                <tr>
-                    <td class="col-md-4">
-
-                            <div class="io-description">
-                                    <b>Parameters :</b>
-                                    <table class="params">
-                                        <thead>
-                                            <tr>
-                                                <td>Name</td>
-                                                    <td>Type</td>
-                                                <td>Optional</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                                <tr>
-                                                        <td>model</td>
-                                                        <td>
-                                                                    <code>T | any</code>
-                                                        </td>
-                                                    
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-
-                                                </tr>
-                                                <tr>
-                                                        <td>localObjToUpdate</td>
-                                                        <td>
-                                                                    <code>T</code>
-                                                        </td>
-                                                    
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-
-                                                </tr>
-                                                <tr>
-                                                        <td>objToUpdate</td>
-                                                        <td>
-                                                                    <code>T</code>
-                                                        </td>
-                                                    
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-
-                                                </tr>
-                                        </tbody>
-                                    </table>
-                            </div>
-                            <div>
-                            </div>
-                            <div class="io-description">
-                                <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
-
-                            </div>
-                                <div class="io-description">
-                                    
-                                </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
@@ -614,7 +279,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="162" class="link-to-prism">src/app/shared/data.service.ts:162</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="69" class="link-to-prism">src/app/shared/crud-service/data.service.ts:69</a></div>
                             </td>
                         </tr>
 
@@ -629,7 +294,7 @@
 
                 <tr>
                     <td class="col-md-4">
-                            <div class="io-description"><p>Create a new object in the database using a front end defined object; will need to wait for the post resolution to get the DB generated UUID assigned to the front end key</p>
+                            <div class="io-description"><p>PUBLIC API</p>
 </div>
 
                             <div class="io-description">
@@ -640,7 +305,6 @@
                                                 <td>Name</td>
                                                     <td>Type</td>
                                                 <td>Optional</td>
-                                                    <td>Description</td>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -655,10 +319,6 @@
                                                     </td>
                                                     
 
-                                                        <td>
-                                                                <code><p>The interface / class to construct the query against and build response objects from</p>
-</code>
-                                                        </td>
                                                 </tr>
                                                 <tr>
                                                         <td>objToCreate</td>
@@ -671,10 +331,6 @@
                                                     </td>
                                                     
 
-                                                        <td>
-                                                                <code><p>The front end object to be created</p>
-</code>
-                                                        </td>
                                                 </tr>
                                         </tbody>
                                     </table>
@@ -714,7 +370,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="182" class="link-to-prism">src/app/shared/data.service.ts:182</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="73" class="link-to-prism">src/app/shared/crud-service/data.service.ts:73</a></div>
                             </td>
                         </tr>
 
@@ -785,30 +441,36 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-                        <a name="createSearchParams"></a>
+                        <a name="createPromise"></a>
                         <span class="name">
                             <b>
-                                <span class="modifier">Private</span>
-                            createSearchParams
+                            createPromise
                             </b>
-                            <a href="#createSearchParams"><span class="icon ion-ios-link"></span></a>
+                            <a href="#createPromise"><span class="icon ion-ios-link"></span></a>
                         </span>
                     </td>
                 </tr>
                 <tr>
                     <td class="col-md-4">
-                            <span class="modifier-icon icon ion-ios-reset"></span>
-                        <code>createSearchParams(query: HttpParams | String)</code>
+<code>createPromise(model: T | any, objToCreate: T | any)</code>
                     </td>
                 </tr>
 
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="130" class="link-to-prism">src/app/shared/data.service.ts:130</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="77" class="link-to-prism">src/app/shared/crud-service/data.service.ts:77</a></div>
                             </td>
                         </tr>
 
+                        <tr>
+                            <td class="col-md-4">
+                                <b>Type parameters :</b>
+                                <ul class="type-parameters">
+                                        <li>T</li>
+                                </ul>
+                            </td>
+                        </tr>
 
                 <tr>
                     <td class="col-md-4">
@@ -825,9 +487,21 @@
                                         </thead>
                                         <tbody>
                                                 <tr>
-                                                        <td>query</td>
+                                                        <td>model</td>
                                                         <td>
-                                                                    <code>HttpParams | String</code>
+                                                                    <code>T | any</code>
+                                                        </td>
+                                                    
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+
+                                                </tr>
+                                                <tr>
+                                                        <td>objToCreate</td>
+                                                        <td>
+                                                                    <code>T | any</code>
                                                         </td>
                                                     
                                                     <td>
@@ -842,7 +516,7 @@
                             <div>
                             </div>
                             <div class="io-description">
-                                <b>Returns : </b>    <code><a href="https://angular.io/api/common/http/HttpParams" target="_blank" >HttpParams</a></code>
+                                <b>Returns : </b>    <code>Promise&lt;T | any&gt;</code>
 
                             </div>
                                 <div class="io-description">
@@ -874,7 +548,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="279" class="link-to-prism">src/app/shared/data.service.ts:279</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="108" class="link-to-prism">src/app/shared/crud-service/data.service.ts:108</a></div>
                             </td>
                         </tr>
 
@@ -889,8 +563,6 @@
 
                 <tr>
                     <td class="col-md-4">
-                            <div class="io-description"><p>Delete a front end object fron the database</p>
-</div>
 
                             <div class="io-description">
                                     <b>Parameters :</b>
@@ -900,7 +572,6 @@
                                                 <td>Name</td>
                                                     <td>Type</td>
                                                 <td>Optional</td>
-                                                    <td>Description</td>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -915,10 +586,6 @@
                                                     </td>
                                                     
 
-                                                        <td>
-                                                                <code><p>The interface / class to construct the query against and build response objects from</p>
-</code>
-                                                        </td>
                                                 </tr>
                                                 <tr>
                                                         <td>objToDelete</td>
@@ -931,10 +598,6 @@
                                                     </td>
                                                     
 
-                                                        <td>
-                                                                <code><p>The front end object to be deleted in the DB</p>
-</code>
-                                                        </td>
                                                 </tr>
                                                 <tr>
                                                         <td>stopNotify</td>
@@ -947,8 +610,6 @@
                                                     </td>
                                                     
 
-                                                        <td>
-                                                        </td>
                                                 </tr>
                                         </tbody>
                                     </table>
@@ -988,7 +649,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="303" class="link-to-prism">src/app/shared/data.service.ts:303</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="112" class="link-to-prism">src/app/shared/crud-service/data.service.ts:112</a></div>
                             </td>
                         </tr>
 
@@ -1059,30 +720,36 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-                        <a name="handleHttpError"></a>
+                        <a name="deletePromise"></a>
                         <span class="name">
                             <b>
-                                <span class="modifier">Private</span>
-                            handleHttpError
+                            deletePromise
                             </b>
-                            <a href="#handleHttpError"><span class="icon ion-ios-link"></span></a>
+                            <a href="#deletePromise"><span class="icon ion-ios-link"></span></a>
                         </span>
                     </td>
                 </tr>
                 <tr>
                     <td class="col-md-4">
-                            <span class="modifier-icon icon ion-ios-reset"></span>
-                        <code>handleHttpError(error: <a href="https://angular.io/api/common/http/HttpErrorResponse" target="_blank">HttpErrorResponse</a>)</code>
+<code>deletePromise(model: T | any, objToDelete: T | any)</code>
                     </td>
                 </tr>
 
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="332" class="link-to-prism">src/app/shared/data.service.ts:332</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="116" class="link-to-prism">src/app/shared/crud-service/data.service.ts:116</a></div>
                             </td>
                         </tr>
 
+                        <tr>
+                            <td class="col-md-4">
+                                <b>Type parameters :</b>
+                                <ul class="type-parameters">
+                                        <li>T</li>
+                                </ul>
+                            </td>
+                        </tr>
 
                 <tr>
                     <td class="col-md-4">
@@ -1099,9 +766,21 @@
                                         </thead>
                                         <tbody>
                                                 <tr>
-                                                        <td>error</td>
+                                                        <td>model</td>
                                                         <td>
-                                                                    <code><a href="https://angular.io/api/common/http/HttpErrorResponse" target="_blank" >HttpErrorResponse</a></code>
+                                                                    <code>T | any</code>
+                                                        </td>
+                                                    
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+
+                                                </tr>
+                                                <tr>
+                                                        <td>objToDelete</td>
+                                                        <td>
+                                                                    <code>T | any</code>
                                                         </td>
                                                     
                                                     <td>
@@ -1116,7 +795,7 @@
                             <div>
                             </div>
                             <div class="io-description">
-                                <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                <b>Returns : </b>    <code>Promise&lt;T | any&gt;</code>
 
                             </div>
                                 <div class="io-description">
@@ -1148,7 +827,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="88" class="link-to-prism">src/app/shared/data.service.ts:88</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="82" class="link-to-prism">src/app/shared/crud-service/data.service.ts:82</a></div>
                             </td>
                         </tr>
 
@@ -1163,8 +842,6 @@
 
                 <tr>
                     <td class="col-md-4">
-                            <div class="io-description"><p>Using a model interface&#39;s table definition, do a HTTP get</p>
-</div>
 
                             <div class="io-description">
                                     <b>Parameters :</b>
@@ -1174,7 +851,6 @@
                                                 <td>Name</td>
                                                     <td>Type</td>
                                                 <td>Optional</td>
-                                                    <td>Description</td>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -1189,10 +865,6 @@
                                                     </td>
                                                     
 
-                                                        <td>
-                                                                <code><p>The interface / class to construct the query against and build response objects from</p>
-</code>
-                                                        </td>
                                                 </tr>
                                                 <tr>
                                                         <td>query</td>
@@ -1205,10 +877,6 @@
                                                     </td>
                                                     
 
-                                                        <td>
-                                                                <code><p>A limiting query to apply to the get. Expects an object of type URLSearchParams to append to the read, or a simple string</p>
-</code>
-                                                        </td>
                                                 </tr>
                                         </tbody>
                                     </table>
@@ -1248,7 +916,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="111" class="link-to-prism">src/app/shared/data.service.ts:111</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="86" class="link-to-prism">src/app/shared/crud-service/data.service.ts:86</a></div>
                             </td>
                         </tr>
 
@@ -1319,6 +987,135 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
+                        <a name="readPromise"></a>
+                        <span class="name">
+                            <b>
+                            readPromise
+                            </b>
+                            <a href="#readPromise"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+<code>readPromise(model: T | any, query?: HttpParams | String)</code>
+                    </td>
+                </tr>
+
+
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="90" class="link-to-prism">src/app/shared/crud-service/data.service.ts:90</a></div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="col-md-4">
+                                <b>Type parameters :</b>
+                                <ul class="type-parameters">
+                                        <li>T</li>
+                                </ul>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+
+                            <div class="io-description">
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>model</td>
+                                                        <td>
+                                                                    <code>T | any</code>
+                                                        </td>
+                                                    
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+
+                                                </tr>
+                                                <tr>
+                                                        <td>query</td>
+                                                        <td>
+                                                                    <code>HttpParams | String</code>
+                                                        </td>
+                                                    
+                                                    <td>
+                                                            Yes
+                                                    </td>
+                                                    
+
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                            <div>
+                            </div>
+                            <div class="io-description">
+                                <b>Returns : </b>    <code>Promise&lt;T | any&gt;</code>
+
+                            </div>
+                                <div class="io-description">
+                                    
+                                </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="setupLocalProps"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            setupLocalProps
+                            </b>
+                            <a href="#setupLocalProps"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                            <span class="modifier-icon icon ion-ios-reset"></span>
+                        <code>setupLocalProps()</code>
+                    </td>
+                </tr>
+
+
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="52" class="link-to-prism">src/app/shared/crud-service/data.service.ts:52</a></div>
+                            </td>
+                        </tr>
+
+
+                <tr>
+                    <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
                         <a name="update"></a>
                         <span class="name">
                             <b>
@@ -1337,7 +1134,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="212" class="link-to-prism">src/app/shared/data.service.ts:212</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="95" class="link-to-prism">src/app/shared/crud-service/data.service.ts:95</a></div>
                             </td>
                         </tr>
 
@@ -1352,8 +1149,6 @@
 
                 <tr>
                     <td class="col-md-4">
-                            <div class="io-description"><p>Update a front end object&#39;s values into the database</p>
-</div>
 
                             <div class="io-description">
                                     <b>Parameters :</b>
@@ -1363,7 +1158,6 @@
                                                 <td>Name</td>
                                                     <td>Type</td>
                                                 <td>Optional</td>
-                                                    <td>Description</td>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -1378,10 +1172,6 @@
                                                     </td>
                                                     
 
-                                                        <td>
-                                                                <code><p>The interface / class to construct the query against and build response objects from</p>
-</code>
-                                                        </td>
                                                 </tr>
                                                 <tr>
                                                         <td>objToUpdate</td>
@@ -1394,10 +1184,6 @@
                                                     </td>
                                                     
 
-                                                        <td>
-                                                                <code><p>The front end object to be updated in the DB</p>
-</code>
-                                                        </td>
                                                 </tr>
                                         </tbody>
                                     </table>
@@ -1437,7 +1223,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="242" class="link-to-prism">src/app/shared/data.service.ts:242</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="99" class="link-to-prism">src/app/shared/crud-service/data.service.ts:99</a></div>
                             </td>
                         </tr>
 
@@ -1495,6 +1281,95 @@
                             </div>
                             <div class="io-description">
                                 <b>Returns : </b>    <code>Observable&lt;T[]&gt;</code>
+
+                            </div>
+                                <div class="io-description">
+                                    
+                                </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="updatePromise"></a>
+                        <span class="name">
+                            <b>
+                            updatePromise
+                            </b>
+                            <a href="#updatePromise"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+<code>updatePromise(model: T | any, objToUpdate: T | any)</code>
+                    </td>
+                </tr>
+
+
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="103" class="link-to-prism">src/app/shared/crud-service/data.service.ts:103</a></div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="col-md-4">
+                                <b>Type parameters :</b>
+                                <ul class="type-parameters">
+                                        <li>T</li>
+                                </ul>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+
+                            <div class="io-description">
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>model</td>
+                                                        <td>
+                                                                    <code>T | any</code>
+                                                        </td>
+                                                    
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+
+                                                </tr>
+                                                <tr>
+                                                        <td>objToUpdate</td>
+                                                        <td>
+                                                                    <code>T | any</code>
+                                                        </td>
+                                                    
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                            <div>
+                            </div>
+                            <div class="io-description">
+                                <b>Returns : </b>    <code>Promise&lt;T | any&gt;</code>
 
                             </div>
                                 <div class="io-description">
@@ -1543,7 +1418,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="63" class="link-to-prism">src/app/shared/data.service.ts:63</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/shared/crud-service/data.service.ts:31</a></div>
                             </td>
                         </tr>
 
@@ -1582,7 +1457,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="48" class="link-to-prism">src/app/shared/data.service.ts:48</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/app/shared/crud-service/data.service.ts:16</a></div>
                             </td>
                         </tr>
 
@@ -1627,7 +1502,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="51" class="link-to-prism">src/app/shared/data.service.ts:51</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/app/shared/crud-service/data.service.ts:19</a></div>
                             </td>
                         </tr>
 
@@ -1660,7 +1535,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="60" class="link-to-prism">src/app/shared/data.service.ts:60</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/shared/crud-service/data.service.ts:28</a></div>
                             </td>
                         </tr>
 
@@ -1699,7 +1574,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="67" class="link-to-prism">src/app/shared/data.service.ts:67</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/shared/crud-service/data.service.ts:35</a></div>
                             </td>
                         </tr>
 
@@ -1738,7 +1613,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="65" class="link-to-prism">src/app/shared/data.service.ts:65</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/shared/crud-service/data.service.ts:33</a></div>
                             </td>
                         </tr>
 
@@ -1751,48 +1626,16 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from &#x27;@angular/common/http&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { HttpClient, HttpHeaders, HttpParams } from &#x27;@angular/common/http&#x27;;
 import { Injectable } from &#x27;@angular/core&#x27;;
-import { Observable, Subject, throwError } from &#x27;rxjs&#x27;;
-import { catchError, tap } from &#x27;rxjs/operators&#x27;;
+import { Observable, Subject } from &#x27;rxjs&#x27;;
 
-import { environment } from &#x27;./../../environments/environment&#x27;;
-import { TableMap } from &#x27;./table-map&#x27;;
-
-/**
- * A mapping of every environment defined DB table to a subject so that CRUD applications can send notifications to all subject subscribers
- * Components can subscribe to the &quot;many&quot; subject to receive an array of new objects, or to the &quot;one&quot; subject to get a single object
- * TODO: Spread this into an individual CRUD subject for each table
- */
-interface SubjectMap {
-  [tableName: string]: {
-    many: Subject&lt;any[]&gt;;
-    one: Subject&lt;any&gt;;
-  }
-}
-
-/**
- * A mapping of every DB table to a load boolean so that external components can wait for a table&#x27;s data to be loaded
- */
-interface LoadingMap {
-  [tableName: string]: boolean
-}
-
-/**
- * A simple cache which is an object whose properties is a table name with an array of that table&#x27;s data loaded into the front end
- */
-interface Cache {
-  [tableName: string]: any[]
-}
-
-/**
- * An interface for what we expect to be used for dynamic Table CRUD
- */
-interface TableCRUD {
-  cache: Cache;
-  subjectMap: SubjectMap;
-  loadingMap: LoadingMap;
-}
+import { environment } from &#x27;../../../environments/environment&#x27;;
+import { TableMap } from &#x27;../table-map&#x27;;
+import { DataCreate } from &#x27;./_create&#x27;;
+import { DataDelete } from &#x27;./_delete&#x27;;
+import { DataRead } from &#x27;./_read&#x27;;
+import { DataUpdate } from &#x27;./_update&#x27;;
 
 @Injectable({
   providedIn: &#x27;root&#x27;
@@ -1820,8 +1663,21 @@ export class DataService {
   loadingMap: LoadingMap &#x3D; {};
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private DC: DataCreate,
+    private DR: DataRead,
+    private DU: DataUpdate,
+    private DD: DataDelete
   ) {
+    this.DC.setDataService(this);
+    this.DR.setDataService(this);
+    this.DU.setDataService(this);
+    this.DD.setDataService(this);
+
+    this.setupLocalProps();
+  }
+
+  private setupLocalProps() {
     // TODO: Figure out how to make a subject with the correct TS model based on the table name
     Object.keys(TableMap).forEach(tableName &#x3D;&gt; {
       this.loadingMap[TableMap[tableName]] &#x3D; false;
@@ -1829,276 +1685,101 @@ export class DataService {
       this.subjectMap[TableMap[tableName]] &#x3D; {
         many: new Subject&lt;any[]&gt;(),
         one: new Subject&lt;any&gt;()
-      }
+      };
     });
   }
 
   /**
-   * Using a model interface&#x27;s table definition, do a HTTP get
-   * @param model The interface / class to construct the query against and build response objects from
-   * @param query A limiting query to apply to the get. Expects an object of type URLSearchParams to append to the read, or a simple string
+   * PUBLIC API
    */
-  read&lt;T&gt;(model: T | any, query?: HttpParams | String) {
-    this.loadingMap[model.tableName] &#x3D; true;
 
-    const httpOpts &#x3D; Object.assign({}, this.httpOptions);
-
-    if (query) {
-      httpOpts.params &#x3D; this.createSearchParams(query);
-    }
-
-    const url &#x3D; &#x60;${this.endpoint}${model.tableName}&#x60;;
-    this.http.get&lt;any[]&gt;(url, httpOpts)
-      .subscribe(
-        res &#x3D;&gt; {
-          this.cacheAndNotifyRead(model, res);
-          this.loadingMap[model.tableName] &#x3D; false;
-        },
-        err &#x3D;&gt; {
-          this.handleHttpError(err);
-          this.loadingMap[model.tableName] &#x3D; false;
-        }
-      );
-  }
-
-  readObs&lt;T&gt;(model: T | any, query?: HttpParams | String): Observable&lt;T[]&gt; {
-    this.loadingMap[model.tableName] &#x3D; true;
-
-    const httpOpts &#x3D; Object.assign({}, this.httpOptions);
-
-    if (query) {
-      httpOpts.params &#x3D; this.createSearchParams(query);
-    }
-
-    const url &#x3D; &#x60;${this.endpoint}${model.tableName}&#x60;;
-    return this.http.get&lt;T[]&gt;(url, httpOpts)
-      .pipe(
-        catchError(this.handleHttpError),
-        tap((res: T[]) &#x3D;&gt; {
-          this.cacheAndNotifyRead(model, res);
-        })
-      );
-  }
-
-  private createSearchParams(query: HttpParams | String): HttpParams {
-    let newParams &#x3D; new HttpParams;
-
-    if (query instanceof String) {
-      const searchParams &#x3D; new HttpParams();
-      const splitQuery &#x3D; query.split(&#x27;&amp;&#x27;);
-      splitQuery.forEach(param &#x3D;&gt; {
-        const keyValPair &#x3D; param.split(&#x27;&#x3D;&#x27;);
-        searchParams.set(keyValPair[0], keyValPair[1]);
-      });
-      newParams &#x3D; searchParams;
-    } else {
-      newParams &#x3D; query;
-    }
-
-    return newParams;
-  }
-
-  private cacheAndNotifyRead&lt;T&gt;(model: T | any, res: T[]) {
-    this.cache[model.tableName] &#x3D; [];
-    res.forEach((el: T) &#x3D;&gt; {
-      this.cache[model.tableName].push(new model(el));
-    });
-    // Update Frontend
-    this.subjectMap[model.tableName].many.next(this.cache[model.tableName]);
-  }
-
-  /**
-   * Create a new object in the database using a front end defined object; will need to wait for the post resolution to get the DB generated UUID assigned to the front end key
-   * @param model The interface / class to construct the query against and build response objects from
-   * @param objToCreate The front end object to be created
-   */
+  // CREATE
   create&lt;T&gt;(model: T | any, objToCreate?: T | any) {
-    this.loadingMap[model.tableName] &#x3D; true;
-
-    const newModelObj &#x3D; new model(objToCreate);
-
-    const url &#x3D; &#x60;${this.endpoint}${model.tableName}&#x60;;
-    this.http.post(url, newModelObj, this.httpOptions)
-      .subscribe(
-        (res: any) &#x3D;&gt; {
-          newModelObj.key &#x3D; res.key || res.ObjectId || res.id || &#x27;&#x27;;
-          this.cacheAndNotifyCreated(model, newModelObj);
-          this.loadingMap[model.tableName] &#x3D; false;
-        },
-        err &#x3D;&gt; {
-          this.handleHttpError(err);
-          this.loadingMap[model.tableName] &#x3D; false;
-        }
-      )
+    this.DC.create(model, objToCreate);
   }
 
   createObs&lt;T&gt;(model: T | any, objToCreate?: T | any): Observable&lt;T | T[]&gt; {
-    const newModelObj &#x3D; new model(objToCreate);
-
-    const url &#x3D; &#x60;${this.endpoint}${model.tableName}&#x60;;
-    return this.http.post(url, newModelObj, this.httpOptions)
-      .pipe(
-        catchError(this.handleHttpError),
-        tap((res: T[] | any) &#x3D;&gt; {
-          newModelObj.key &#x3D; res.key || res.ObjectId || res.id || &#x27;&#x27;;
-          this.cacheAndNotifyCreated(model, newModelObj);
-        })
-      );
+    return this.DC.createObs(model, objToCreate);
   }
 
-  private cacheAndNotifyCreated&lt;T&gt;(model: T | any, newModelObj) {
-    // Append the new object into the front end cache
-    this.cache[model.tableName].push(Object.assign({}, newModelObj));
-
-    this.subjectMap[model.tableName].many.next(this.cache[model.tableName]);
-    this.subjectMap[model.tableName].one.next(newModelObj);
+  createPromise&lt;T&gt;(model: T | any, objToCreate: T | any): Promise&lt;T | any&gt; {
+    return this.DC.createPromise(model, objToCreate);
   }
 
-  // TODO: 
-  // CREATEBULK
+  // READ
+  read&lt;T&gt;(model: T | any, query?: HttpParams | String) {
+    this.DR.read(model, query);
+  }
 
-  /**
-   * Update a front end object&#x27;s values into the database
-   * @param model The interface / class to construct the query against and build response objects from
-   * @param objToUpdate The front end object to be updated in the DB
-   */
+  readObs&lt;T&gt;(model: T | any, query?: HttpParams | String): Observable&lt;T[]&gt; {
+    return this.DR.readObs(model, query);
+  }
+
+  readPromise&lt;T&gt;(model: T | any, query?: HttpParams | String): Promise&lt;T | any&gt; {
+    return this.DR.readPromise(model, query);
+  }
+
+  // UPDATE
   update&lt;T&gt;(model: T | any, objToUpdate: T | any) {
-    this.loadingMap[model.tableName] &#x3D; true;
-
-    // Find the front end object to update in the cache
-    const localObjToUpdate: T | any &#x3D; this.cache[model.tableName].find(el &#x3D;&gt; el.key &#x3D;&#x3D;&#x3D; objToUpdate.key);
-    if (!localObjToUpdate) {
-      return;
-    }
-    let copyObjToUpdate &#x3D; Object.assign({}, localObjToUpdate);
-    copyObjToUpdate &#x3D; Object.assign(copyObjToUpdate, objToUpdate);
-
-    if (this.isOptimistic) {
-      this.cacheAndNotifyUpdated(model, localObjToUpdate, objToUpdate);
-    }
-
-    const url &#x3D; &#x60;${this.endpoint}${model.tableName}/${localObjToUpdate.key}&#x60;;
-    this.http.patch(url, localObjToUpdate, this.httpOptions).subscribe(
-      res &#x3D;&gt; {
-        if (!this.isOptimistic) {
-          this.cacheAndNotifyUpdated(model, localObjToUpdate, objToUpdate);
-        }
-        this.loadingMap[model.tableName] &#x3D; false;
-      },
-      err &#x3D;&gt; {
-        this.handleHttpError(err);
-        this.loadingMap[model.tableName] &#x3D; false;
-      }
-    )
+    this.DU.update(model, objToUpdate);
   }
 
   updateObs&lt;T&gt;(model: T | any, objToUpdate: T | any): Observable&lt;T[]&gt; {
-    // Find the front end object to update in the cache
-    const localObjToUpdate: T | any &#x3D; this.cache[model.tableName].find(el &#x3D;&gt; el.key &#x3D;&#x3D;&#x3D; objToUpdate.key);
-    if (!localObjToUpdate) {
-      return;
-    }
-    let copyObjToUpdate &#x3D; Object.assign({}, localObjToUpdate);
-    copyObjToUpdate &#x3D; Object.assign(copyObjToUpdate, objToUpdate);
-
-    const url &#x3D; &#x60;${this.endpoint}${model.tableName}/${localObjToUpdate.key}&#x60;;
-    return this.http.patch&lt;T[]&gt;(url, copyObjToUpdate, this.httpOptions)
-      .pipe(
-        catchError(this.handleHttpError),
-        tap((res: T[]) &#x3D;&gt; {
-          this.cacheAndNotifyUpdated(model, localObjToUpdate, objToUpdate);
-        })
-      );
+    return this.DU.updateObs(model, objToUpdate);
   }
 
-  private cacheAndNotifyUpdated&lt;T&gt;(model: T | any, localObjToUpdate: T, objToUpdate: T) {
-    // Copy the new object into the local object reference using Object.assign
-    Object.assign(localObjToUpdate, objToUpdate);
-
-    // Optimistic Update Frontend
-    this.subjectMap[model.tableName].many.next(this.cache[model.tableName]);
-    this.subjectMap[model.tableName].one.next(localObjToUpdate);
+  updatePromise&lt;T&gt;(model: T | any, objToUpdate: T | any): Promise&lt;T | any&gt; {
+    return this.DU.updatePromise(model, objToUpdate);
   }
 
-  // TODO: 
-  // UPDATEBULK
-
-  /**
-   * Delete a front end object fron the database
-   * @param model The interface / class to construct the query against and build response objects from
-   * @param objToDelete The front end object to be deleted in the DB
-   * @param notifyOne Determine if we should just notify with an object update...
-   */
+  // DELETE
   delete&lt;T&gt;(model: T | any, objToDelete: T | any, stopNotify?: boolean) {
-    this.loadingMap[model.tableName] &#x3D; true;
-
-    // Optimistic Update Frontend
-    if (this.isOptimistic &amp;&amp; !stopNotify) {
-      this.cacheAndNotifyDelete(model, objToDelete);
-    }
-
-    const url &#x3D; &#x60;${this.endpoint}${model.tableName}/${objToDelete.key || objToDelete.id}&#x60;;
-    this.http.delete(url, this.httpOptions)
-      .subscribe(
-        res &#x3D;&gt; {
-          if (!this.isOptimistic &amp;&amp; !stopNotify) { // wait for the server response before modifying the front end
-            this.cacheAndNotifyDelete(model, objToDelete);
-          }
-          this.loadingMap[model.tableName] &#x3D; false;
-        },
-        err &#x3D;&gt; {
-          this.handleHttpError(err)
-          this.loadingMap[model.tableName] &#x3D; false;
-        }
-      )
+    this.DD.delete(model, objToDelete, stopNotify);
   }
-
+  
   deleteObs&lt;T&gt;(model: T | any, objToDelete: T | any): Observable&lt;T[]&gt; {
-    if (this.isOptimistic) {
-      // Optimistically Remove the object to delete from the front end cache by filtering out everything that doesn&#x27;t have the same key
-      this.cache[model.tableName] &#x3D; this.cache[model.tableName].filter(el &#x3D;&gt; el.key !&#x3D;&#x3D; objToDelete.key);
-    }
-
-    const url &#x3D; &#x60;${this.endpoint}${model.tableName}/${objToDelete.key || objToDelete.id}&#x60;;
-    return this.http.delete&lt;T[]&gt;(url, this.httpOptions)
-      .pipe(
-        catchError(this.handleHttpError),
-        tap((res: T[]) &#x3D;&gt; {
-          if (!this.isOptimistic) { // wait for the server response before modifying the front end
-            this.cache[model.tableName] &#x3D; this.cache[model.tableName].filter(el &#x3D;&gt; el.key !&#x3D;&#x3D; objToDelete.key);
-          }
-        })
-      );
+    return this.DD.deleteObs(model, objToDelete);
   }
-
-  private cacheAndNotifyDelete&lt;T&gt;(model: T | any, objToDelete: T | any) {
-    // Remove the object to delete from the front end cache by filtering out everything that doesn&#x27;t have the same key
-    this.cache[model.tableName] &#x3D; this.cache[model.tableName].filter(el &#x3D;&gt; el.key !&#x3D;&#x3D; objToDelete.key);
-
-    this.subjectMap[model.tableName].many.next(this.cache[model.tableName]);
-    this.subjectMap[model.tableName].one.next(objToDelete);
+  
+  deletePromise&lt;T&gt;(model: T | any, objToDelete: T | any): Promise&lt;T | any&gt; {
+    return this.DD.deletePromise(model, objToDelete);
   }
+}
 
-  // TODO: 
-  // DELETEBULK
-
-  private handleHttpError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
-      console.error(&#x27;An error occurred:&#x27;, error.error.message);
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
-      console.error(
-        &#x60;Backend returned code ${error.status}, &#x60; +
-        &#x60;body was: ${error.error}&#x60;);
-    }
-    // return an observable with a user-facing error message
-    return throwError(
-      &#x27;Something bad happened; please try again later.&#x27;);
+/**
+ * A mapping of every environment defined DB table to a subject so that CRUD applications can send notifications to all subject subscribers
+ * Components can subscribe to the &quot;many&quot; subject to receive an array of new objects, or to the &quot;one&quot; subject to get a single object
+ * TODO: Investigate and Spread this into an individual CRUD subject for each table
+ */
+interface SubjectMap {
+  [tableName: string]: {
+    many: Subject&lt;any[]&gt;;
+    one: Subject&lt;any&gt;;
   };
 }
-</code></pre>
+
+/**
+ * A mapping of every DB table to a load boolean so that external components can wait for a table&#x27;s data to be loaded
+ */
+interface LoadingMap {
+  [tableName: string]: boolean;
+}
+
+/**
+ * A simple cache which is an object whose properties is a table name with an array of that table&#x27;s data loaded into the front end
+ */
+interface Cache {
+  [tableName: string]: any[];
+}
+
+/**
+ * An interface for what we expect to be used for dynamic Table CRUD
+ */
+interface TableCRUD {
+  cache: Cache;
+  subjectMap: SubjectMap;
+  loadingMap: LoadingMap;
+}</code></pre>
     </div>
 
 </div>

@@ -2,6 +2,14 @@
   <h1>Dynamic Angular CRUD Example</h1>
 </mat-toolbar>
 
+<p>Select a button to load the list data asynchonsouly by the method indicated on the button!</p>
+
+<mat-toolbar style="display:flex;justify-content:space-between;margin-bottom:1rem;">
+  <button mat-flat-button color="accent" label="Subject" (click)="switchReadMethod($event, 'subject')">Subject</button>
+  <button mat-flat-button color="accent" label="Observable" (click)="switchReadMethod($event, 'observable')">Observable</button>
+  <button mat-flat-button color="accent" label="Promise" (click)="switchReadMethod($event, 'promise')">Promise</button>
+</mat-toolbar>
+
 <main class="d-flex">
   <div id="productList" class="col-md-4">
     <mat-toolbar>

@@ -43,7 +43,7 @@
 
 <ol class="breadcrumb">
   <li>Interfaces</li>
-  <li>ITBSeller</li>
+  <li>ISeller</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -61,7 +61,7 @@
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/app/models/TBSeller.ts</code>
+            <code>src/app/models/Seller.ts</code>
         </p>
 
 
@@ -217,14 +217,14 @@
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { TableMap } from &#x27;./../shared/table-map&#x27;;
 import { IDataBaseObj } from &#x27;./_base&#x27;;
 
-export interface ITBSeller extends IDataBaseObj {
+export interface ISeller extends IDataBaseObj {
     name?: string;
     location?: string;
     dateCreated?: Date;
 }
 
-export class TBSeller implements ITBSeller {
-    static tableName: string &#x3D; TableMap.TBCompanies;
+export class Seller implements ISeller {
+    static tableName: string &#x3D; TableMap.Sellers;
 
     id: string;
 
@@ -232,7 +232,7 @@ export class TBSeller implements ITBSeller {
     location?: string;
     dateCreated?: Date;
 
-    constructor(props: ITBSeller) {
+    constructor(props: ISeller) {
         Object.keys(props).forEach(prop &#x3D;&gt; {
             const value &#x3D; props[prop];
             this[prop] &#x3D; value;
@@ -264,7 +264,7 @@ export class TBSeller implements ITBSeller {
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
-            var COMPODOC_CURRENT_PAGE_URL = 'ITBSeller.html';
+            var COMPODOC_CURRENT_PAGE_URL = 'ISeller.html';
        </script>
 
        <script src="../js/libs/custom-elements.min.js"></script>
