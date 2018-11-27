@@ -1,1 +1,2 @@
 # dynamic-angular-crud
+This project is an attempt at creating a reusable CRUD (Create, Read, Update, Delete) data service in Angular to make it easier for performing CRUD operations against many different Database Tables.
