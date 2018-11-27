@@ -126,6 +126,26 @@ export class DataService {
         })
       );
   }
+  
+  readPromise<T>(model: T | any, query?: HttpParams | String): Promise<T | any> {
+    this.loadingMap[model.tableName] = true;
+
+    const httpOpts = Object.assign({}, this.httpOptions);
+
+    if (query) {
+      httpOpts.params = this.createSearchParams(query);
+    }
+
+    const url = `${this.endpoint}${model.tableName}`; // TODO: Spread query params for the fetch
+    return fetch(url)
+      .then(res => res.json())
+      .then((res: T[] | any) => {
+        this.cacheAndNotifyRead(model, res);
+      })
+      .catch(err => {
+        this.handleHttpError(err);
+      });
+  }
 
   private createSearchParams(query: HttpParams | String): HttpParams {
     let newParams = new HttpParams;
@@ -192,6 +212,24 @@ export class DataService {
         })
       );
   }
+  
+  createPromise<T>(model: T | any, objToCreate: T | any): Promise<T | any> {
+    const newModelObj = new model(objToCreate);
+    
+    const url = `${this.endpoint}${model.tableName}`;
+    return fetch(url, {
+      method: 'post',
+      body: JSON.stringify(objToCreate)
+    })
+      .then(res => res.json())
+      .then((res: T[] | any) => {
+        newModelObj.key = res.key || res.ObjectId || res.id || '';
+        this.cacheAndNotifyCreated(model, newModelObj); 
+      })
+      .catch(err => {
+        this.handleHttpError(err);
+      });
+  }
 
   private cacheAndNotifyCreated<T>(model: T | any, newModelObj) {
     // Append the new object into the front end cache
@@ -212,23 +250,15 @@ export class DataService {
   update<T>(model: T | any, objToUpdate: T | any) {
     this.loadingMap[model.tableName] = true;
 
-    // Find the front end object to update in the cache
-    const localObjToUpdate: T | any = this.cache[model.tableName].find(el => el.key === objToUpdate.key);
-    if (!localObjToUpdate) {
-      return;
-    }
-    let copyObjToUpdate = Object.assign({}, localObjToUpdate);
-    copyObjToUpdate = Object.assign(copyObjToUpdate, objToUpdate);
-
     if (this.isOptimistic) {
-      this.cacheAndNotifyUpdated(model, localObjToUpdate, objToUpdate);
+      this.cacheAndNotifyUpdated(model, objToUpdate);
     }
 
-    const url = `${this.endpoint}${model.tableName}/${localObjToUpdate.key}`;
-    this.http.patch(url, localObjToUpdate, this.httpOptions).subscribe(
+    const url = `${this.endpoint}${model.tableName}/${objToUpdate.key}`;
+    this.http.patch(url, objToUpdate, this.httpOptions).subscribe(
       res => {
         if (!this.isOptimistic) {
-          this.cacheAndNotifyUpdated(model, localObjToUpdate, objToUpdate);
+          this.cacheAndNotifyUpdated(model, objToUpdate);
         }
         this.loadingMap[model.tableName] = false;
       },
@@ -240,25 +270,40 @@ export class DataService {
   }
 
   updateObs<T>(model: T | any, objToUpdate: T | any): Observable<T[]> {
-    // Find the front end object to update in the cache
+    const url = `${this.endpoint}${model.tableName}/${objToUpdate.key}`;
+    return this.http.patch<T[]>(url, objToUpdate, this.httpOptions)
+      .pipe(
+        catchError(this.handleHttpError),
+        tap((res: T[]) => {
+          this.cacheAndNotifyUpdated(model, objToUpdate);
+        })
+      );
+  }
+  
+  updatePromise<T>(model: T | any, objToUpdate: T | any): Promise<T | any> {
+    const url = `${this.endpoint}${model.tableName}/${objToUpdate.key}`;
+    return fetch(url, {
+      method: 'patch',
+      body: JSON.stringify(objToUpdate)
+    })
+      .then(res => res.json())
+      .then((res: T[] | any) => {
+        this.cacheAndNotifyUpdated(model, objToUpdate);
+      })
+      .catch(err => {
+        this.handleHttpError(err);
+      });
+  }
+
+  private cacheAndNotifyUpdated<T>(model: T | any, objToUpdate: T | any) {
+        // Find the front end object to update in the cache
     const localObjToUpdate: T | any = this.cache[model.tableName].find(el => el.key === objToUpdate.key);
     if (!localObjToUpdate) {
       return;
     }
     let copyObjToUpdate = Object.assign({}, localObjToUpdate);
     copyObjToUpdate = Object.assign(copyObjToUpdate, objToUpdate);
-
-    const url = `${this.endpoint}${model.tableName}/${localObjToUpdate.key}`;
-    return this.http.patch<T[]>(url, copyObjToUpdate, this.httpOptions)
-      .pipe(
-        catchError(this.handleHttpError),
-        tap((res: T[]) => {
-          this.cacheAndNotifyUpdated(model, localObjToUpdate, objToUpdate);
-        })
-      );
-  }
-
-  private cacheAndNotifyUpdated<T>(model: T | any, localObjToUpdate: T, objToUpdate: T) {
+    
     // Copy the new object into the local object reference using Object.assign
     Object.assign(localObjToUpdate, objToUpdate);
 
@@ -316,6 +361,28 @@ export class DataService {
           }
         })
       );
+  }
+  
+  deletePromise<T>(model: T | any, objToDelete: T | any): Promise<T | any> {
+    if (this.isOptimistic) {
+      // Optimistically Remove the object to delete from the front end cache by filtering out everything that doesn't have the same key
+      this.cache[model.tableName] = this.cache[model.tableName].filter(el => el.key !== objToDelete.key);
+    }
+
+    const url = `${this.endpoint}${model.tableName}/${objToDelete.key || objToDelete.id}`;
+    return fetch(url, {
+      method: 'delete',
+      body: JSON.stringify(objToDelete)
+    })
+      .then(res => res.json())
+      .then((res: T[] | any) => {
+        if (!this.isOptimistic) { // wait for the server response before modifying the front end
+          this.cache[model.tableName] = this.cache[model.tableName].filter(el => el.key !== objToDelete.key);
+        }
+      })
+      .catch(err => {
+        this.handleHttpError(err);
+      });
   }
 
   private cacheAndNotifyDelete<T>(model: T | any, objToDelete: T | any) {

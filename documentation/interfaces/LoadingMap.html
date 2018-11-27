@@ -1,0 +1,505 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>dynamic-angular-crud documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">dynamic-angular-crud documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content interface">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li>Interfaces</li>
+  <li>LoadingMap</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/shared/data.service.ts</code>
+        </p>
+
+            <p class="comment">
+                <h3>Description</h3>
+            </p>
+            <p class="comment">
+                <p>A mapping of every DB table to a load boolean so that external components can wait for a table&#39;s data to be loaded</p>
+
+            </p>
+
+
+
+
+            <section>
+    <h3 id="inputs">Indexable</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <code>[tableName: string]:    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/app/shared/data.service.ts:24</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from &#x27;@angular/common/http&#x27;;
+import { Injectable } from &#x27;@angular/core&#x27;;
+import { Observable, Subject, throwError } from &#x27;rxjs&#x27;;
+import { catchError, tap } from &#x27;rxjs/operators&#x27;;
+
+import { environment } from &#x27;./../../environments/environment&#x27;;
+import { TableMap } from &#x27;./table-map&#x27;;
+
+/**
+ * A mapping of every environment defined DB table to a subject so that CRUD applications can send notifications to all subject subscribers
+ * Components can subscribe to the &quot;many&quot; subject to receive an array of new objects, or to the &quot;one&quot; subject to get a single object
+ * TODO: Spread this into an individual CRUD subject for each table
+ */
+interface SubjectMap {
+  [tableName: string]: {
+    many: Subject&lt;any[]&gt;;
+    one: Subject&lt;any&gt;;
+  }
+}
+
+/**
+ * A mapping of every DB table to a load boolean so that external components can wait for a table&#x27;s data to be loaded
+ */
+interface LoadingMap {
+  [tableName: string]: boolean
+}
+
+/**
+ * A simple cache which is an object whose properties is a table name with an array of that table&#x27;s data loaded into the front end
+ */
+interface Cache {
+  [tableName: string]: any[]
+}
+
+/**
+ * An interface for what we expect to be used for dynamic Table CRUD
+ */
+interface TableCRUD {
+  cache: Cache;
+  subjectMap: SubjectMap;
+  loadingMap: LoadingMap;
+}
+
+@Injectable({
+  providedIn: &#x27;root&#x27;
+})
+export class DataService {
+  endpoint: string &#x3D; environment.serverUrl;
+
+  // Define header options to be applied to all requests
+  httpOptions &#x3D; {
+    headers: new HttpHeaders({
+      &#x27;Content-Type&#x27;: &#x27;application/json&#x27;,
+      // &#x27;Authorization&#x27;: &#x27;my-auth-token&#x27;
+    }),
+    params: new HttpParams()
+  };
+
+  // Determine whether or not to be optimstic with our Http calls in terms of updating the front end. True means update the front end right away despite what the server does.
+  isOptimistic &#x3D; true;
+
+  // A simple object that is used a cache for any data that has been loaded into the system
+  cache: any &#x3D; {};
+  // A map of TableName &#x3D;&gt; Subject for external components to subscribe to, in order to be notified of updates to that table&#x27;s data
+  subjectMap: SubjectMap &#x3D; {};
+  // A map of TableName &#x3D;&gt; Boolean to components to use for displaying a loading icon when that table&#x27;s data is being loaded or modified
+  loadingMap: LoadingMap &#x3D; {};
+
+  constructor(
+    private http: HttpClient
+  ) {
+    // TODO: Figure out how to make a subject with the correct TS model based on the table name
+    Object.keys(TableMap).forEach(tableName &#x3D;&gt; {
+      this.loadingMap[TableMap[tableName]] &#x3D; false;
+      this.cache[TableMap[tableName]] &#x3D; [];
+      this.subjectMap[TableMap[tableName]] &#x3D; {
+        many: new Subject&lt;any[]&gt;(),
+        one: new Subject&lt;any&gt;()
+      }
+    });
+  }
+
+  /**
+   * Using a model interface&#x27;s table definition, do a HTTP get
+   * @param model The interface / class to construct the query against and build response objects from
+   * @param query A limiting query to apply to the get. Expects an object of type URLSearchParams to append to the read, or a simple string
+   */
+  read&lt;T&gt;(model: T | any, query?: HttpParams | String) {
+    this.loadingMap[model.tableName] &#x3D; true;
+
+    const httpOpts &#x3D; Object.assign({}, this.httpOptions);
+
+    if (query) {
+      httpOpts.params &#x3D; this.createSearchParams(query);
+    }
+
+    const url &#x3D; &#x60;${this.endpoint}${model.tableName}&#x60;;
+    this.http.get&lt;any[]&gt;(url, httpOpts)
+      .subscribe(
+        res &#x3D;&gt; {
+          this.cacheAndNotifyRead(model, res);
+          this.loadingMap[model.tableName] &#x3D; false;
+        },
+        err &#x3D;&gt; {
+          this.handleHttpError(err);
+          this.loadingMap[model.tableName] &#x3D; false;
+        }
+      );
+  }
+
+  readObs&lt;T&gt;(model: T | any, query?: HttpParams | String): Observable&lt;T[]&gt; {
+    this.loadingMap[model.tableName] &#x3D; true;
+
+    const httpOpts &#x3D; Object.assign({}, this.httpOptions);
+
+    if (query) {
+      httpOpts.params &#x3D; this.createSearchParams(query);
+    }
+
+    const url &#x3D; &#x60;${this.endpoint}${model.tableName}&#x60;;
+    return this.http.get&lt;T[]&gt;(url, httpOpts)
+      .pipe(
+        catchError(this.handleHttpError),
+        tap((res: T[]) &#x3D;&gt; {
+          this.cacheAndNotifyRead(model, res);
+        })
+      );
+  }
+
+  private createSearchParams(query: HttpParams | String): HttpParams {
+    let newParams &#x3D; new HttpParams;
+
+    if (query instanceof String) {
+      const searchParams &#x3D; new HttpParams();
+      const splitQuery &#x3D; query.split(&#x27;&amp;&#x27;);
+      splitQuery.forEach(param &#x3D;&gt; {
+        const keyValPair &#x3D; param.split(&#x27;&#x3D;&#x27;);
+        searchParams.set(keyValPair[0], keyValPair[1]);
+      });
+      newParams &#x3D; searchParams;
+    } else {
+      newParams &#x3D; query;
+    }
+
+    return newParams;
+  }
+
+  private cacheAndNotifyRead&lt;T&gt;(model: T | any, res: T[]) {
+    this.cache[model.tableName] &#x3D; [];
+    res.forEach((el: T) &#x3D;&gt; {
+      this.cache[model.tableName].push(new model(el));
+    });
+    // Update Frontend
+    this.subjectMap[model.tableName].many.next(this.cache[model.tableName]);
+  }
+
+  /**
+   * Create a new object in the database using a front end defined object; will need to wait for the post resolution to get the DB generated UUID assigned to the front end key
+   * @param model The interface / class to construct the query against and build response objects from
+   * @param objToCreate The front end object to be created
+   */
+  create&lt;T&gt;(model: T | any, objToCreate?: T | any) {
+    this.loadingMap[model.tableName] &#x3D; true;
+
+    const newModelObj &#x3D; new model(objToCreate);
+
+    const url &#x3D; &#x60;${this.endpoint}${model.tableName}&#x60;;
+    this.http.post(url, newModelObj, this.httpOptions)
+      .subscribe(
+        (res: any) &#x3D;&gt; {
+          newModelObj.key &#x3D; res.key || res.ObjectId || res.id || &#x27;&#x27;;
+          this.cacheAndNotifyCreated(model, newModelObj);
+          this.loadingMap[model.tableName] &#x3D; false;
+        },
+        err &#x3D;&gt; {
+          this.handleHttpError(err);
+          this.loadingMap[model.tableName] &#x3D; false;
+        }
+      )
+  }
+
+  createObs&lt;T&gt;(model: T | any, objToCreate?: T | any): Observable&lt;T | T[]&gt; {
+    const newModelObj &#x3D; new model(objToCreate);
+
+    const url &#x3D; &#x60;${this.endpoint}${model.tableName}&#x60;;
+    return this.http.post(url, newModelObj, this.httpOptions)
+      .pipe(
+        catchError(this.handleHttpError),
+        tap((res: T[] | any) &#x3D;&gt; {
+          newModelObj.key &#x3D; res.key || res.ObjectId || res.id || &#x27;&#x27;;
+          this.cacheAndNotifyCreated(model, newModelObj);
+        })
+      );
+  }
+
+  private cacheAndNotifyCreated&lt;T&gt;(model: T | any, newModelObj) {
+    // Append the new object into the front end cache
+    this.cache[model.tableName].push(Object.assign({}, newModelObj));
+
+    this.subjectMap[model.tableName].many.next(this.cache[model.tableName]);
+    this.subjectMap[model.tableName].one.next(newModelObj);
+  }
+
+  // TODO: 
+  // CREATEBULK
+
+  /**
+   * Update a front end object&#x27;s values into the database
+   * @param model The interface / class to construct the query against and build response objects from
+   * @param objToUpdate The front end object to be updated in the DB
+   */
+  update&lt;T&gt;(model: T | any, objToUpdate: T | any) {
+    this.loadingMap[model.tableName] &#x3D; true;
+
+    // Find the front end object to update in the cache
+    const localObjToUpdate: T | any &#x3D; this.cache[model.tableName].find(el &#x3D;&gt; el.key &#x3D;&#x3D;&#x3D; objToUpdate.key);
+    if (!localObjToUpdate) {
+      return;
+    }
+    let copyObjToUpdate &#x3D; Object.assign({}, localObjToUpdate);
+    copyObjToUpdate &#x3D; Object.assign(copyObjToUpdate, objToUpdate);
+
+    if (this.isOptimistic) {
+      this.cacheAndNotifyUpdated(model, localObjToUpdate, objToUpdate);
+    }
+
+    const url &#x3D; &#x60;${this.endpoint}${model.tableName}/${localObjToUpdate.key}&#x60;;
+    this.http.patch(url, localObjToUpdate, this.httpOptions).subscribe(
+      res &#x3D;&gt; {
+        if (!this.isOptimistic) {
+          this.cacheAndNotifyUpdated(model, localObjToUpdate, objToUpdate);
+        }
+        this.loadingMap[model.tableName] &#x3D; false;
+      },
+      err &#x3D;&gt; {
+        this.handleHttpError(err);
+        this.loadingMap[model.tableName] &#x3D; false;
+      }
+    )
+  }
+
+  updateObs&lt;T&gt;(model: T | any, objToUpdate: T | any): Observable&lt;T[]&gt; {
+    // Find the front end object to update in the cache
+    const localObjToUpdate: T | any &#x3D; this.cache[model.tableName].find(el &#x3D;&gt; el.key &#x3D;&#x3D;&#x3D; objToUpdate.key);
+    if (!localObjToUpdate) {
+      return;
+    }
+    let copyObjToUpdate &#x3D; Object.assign({}, localObjToUpdate);
+    copyObjToUpdate &#x3D; Object.assign(copyObjToUpdate, objToUpdate);
+
+    const url &#x3D; &#x60;${this.endpoint}${model.tableName}/${localObjToUpdate.key}&#x60;;
+    return this.http.patch&lt;T[]&gt;(url, copyObjToUpdate, this.httpOptions)
+      .pipe(
+        catchError(this.handleHttpError),
+        tap((res: T[]) &#x3D;&gt; {
+          this.cacheAndNotifyUpdated(model, localObjToUpdate, objToUpdate);
+        })
+      );
+  }
+
+  private cacheAndNotifyUpdated&lt;T&gt;(model: T | any, localObjToUpdate: T, objToUpdate: T) {
+    // Copy the new object into the local object reference using Object.assign
+    Object.assign(localObjToUpdate, objToUpdate);
+
+    // Optimistic Update Frontend
+    this.subjectMap[model.tableName].many.next(this.cache[model.tableName]);
+    this.subjectMap[model.tableName].one.next(localObjToUpdate);
+  }
+
+  // TODO: 
+  // UPDATEBULK
+
+  /**
+   * Delete a front end object fron the database
+   * @param model The interface / class to construct the query against and build response objects from
+   * @param objToDelete The front end object to be deleted in the DB
+   * @param notifyOne Determine if we should just notify with an object update...
+   */
+  delete&lt;T&gt;(model: T | any, objToDelete: T | any, stopNotify?: boolean) {
+    this.loadingMap[model.tableName] &#x3D; true;
+
+    // Optimistic Update Frontend
+    if (this.isOptimistic &amp;&amp; !stopNotify) {
+      this.cacheAndNotifyDelete(model, objToDelete);
+    }
+
+    const url &#x3D; &#x60;${this.endpoint}${model.tableName}/${objToDelete.key || objToDelete.id}&#x60;;
+    this.http.delete(url, this.httpOptions)
+      .subscribe(
+        res &#x3D;&gt; {
+          if (!this.isOptimistic &amp;&amp; !stopNotify) { // wait for the server response before modifying the front end
+            this.cacheAndNotifyDelete(model, objToDelete);
+          }
+          this.loadingMap[model.tableName] &#x3D; false;
+        },
+        err &#x3D;&gt; {
+          this.handleHttpError(err)
+          this.loadingMap[model.tableName] &#x3D; false;
+        }
+      )
+  }
+
+  deleteObs&lt;T&gt;(model: T | any, objToDelete: T | any): Observable&lt;T[]&gt; {
+    if (this.isOptimistic) {
+      // Optimistically Remove the object to delete from the front end cache by filtering out everything that doesn&#x27;t have the same key
+      this.cache[model.tableName] &#x3D; this.cache[model.tableName].filter(el &#x3D;&gt; el.key !&#x3D;&#x3D; objToDelete.key);
+    }
+
+    const url &#x3D; &#x60;${this.endpoint}${model.tableName}/${objToDelete.key || objToDelete.id}&#x60;;
+    return this.http.delete&lt;T[]&gt;(url, this.httpOptions)
+      .pipe(
+        catchError(this.handleHttpError),
+        tap((res: T[]) &#x3D;&gt; {
+          if (!this.isOptimistic) { // wait for the server response before modifying the front end
+            this.cache[model.tableName] &#x3D; this.cache[model.tableName].filter(el &#x3D;&gt; el.key !&#x3D;&#x3D; objToDelete.key);
+          }
+        })
+      );
+  }
+
+  private cacheAndNotifyDelete&lt;T&gt;(model: T | any, objToDelete: T | any) {
+    // Remove the object to delete from the front end cache by filtering out everything that doesn&#x27;t have the same key
+    this.cache[model.tableName] &#x3D; this.cache[model.tableName].filter(el &#x3D;&gt; el.key !&#x3D;&#x3D; objToDelete.key);
+
+    this.subjectMap[model.tableName].many.next(this.cache[model.tableName]);
+    this.subjectMap[model.tableName].one.next(objToDelete);
+  }
+
+  // TODO: 
+  // DELETEBULK
+
+  private handleHttpError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error(&#x27;An error occurred:&#x27;, error.error.message);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      console.error(
+        &#x60;Backend returned code ${error.status}, &#x60; +
+        &#x60;body was: ${error.error}&#x60;);
+    }
+    // return an observable with a user-facing error message
+    return throwError(
+      &#x27;Something bad happened; please try again later.&#x27;);
+  };
+}
+</code></pre>
+    </div>
+</div>
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
+            var COMPODOC_CURRENT_PAGE_URL = 'LoadingMap.html';
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

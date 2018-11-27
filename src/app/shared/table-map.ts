@@ -1,5 +1,5 @@
 export class TableMap {
-    static TeddyBears = 'TeddyBears';
-    static TBCompanies = 'TeddyBearCompanies';
-    static TBSellers = 'TeddyBearSellers';
+    static Products = 'Products';
+    static Companies = 'Companies';
+    static Sellers = 'Sellers';
 }

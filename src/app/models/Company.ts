@@ -1,14 +1,14 @@
 import { TableMap } from './../shared/table-map';
 import { IDataBaseObj } from './_base';
 
-export interface ITBSeller extends IDataBaseObj {
+export interface ICompany extends IDataBaseObj {
     name?: string;
     location?: string;
     dateCreated?: Date;
 }
 
-export class TBSeller implements ITBSeller {
-    static tableName: string = TableMap.TBCompanies;
+export class Company implements ICompany {
+    static tableName: string = TableMap.Companies;
 
     id: string;
 
@@ -16,7 +16,7 @@ export class TBSeller implements ITBSeller {
     location?: string;
     dateCreated?: Date;
 
-    constructor(props: ITBSeller) {
+    constructor(props: ICompany) {
         Object.keys(props).forEach(prop => {
             const value = props[prop];
             this[prop] = value;

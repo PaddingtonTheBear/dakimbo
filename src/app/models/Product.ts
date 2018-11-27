@@ -1,7 +1,7 @@
 import { IDataBaseObj } from './_base';
 import { TableMap } from '../shared/table-map';
 
-export interface ITeddyBear extends IDataBaseObj {
+export interface IProduct extends IDataBaseObj {
     name?: string;
     type?: string;
     origin?: string;
@@ -12,8 +12,8 @@ export interface ITeddyBear extends IDataBaseObj {
     companyKey?: string;
 }
 
-export class TeddyBear implements ITeddyBear {
-    static tableName: string = TableMap.TeddyBears;
+export class Product implements IProduct {
+    static tableName: string = TableMap.Products;
 
     id: string;
 
@@ -26,7 +26,7 @@ export class TeddyBear implements ITeddyBear {
 
     companyKey: string;
 
-    constructor(props: ITeddyBear) {
+    constructor(props: IProduct) {
         Object.keys(props).forEach(prop => {
             const value = props[prop];
             this[prop] = value;
