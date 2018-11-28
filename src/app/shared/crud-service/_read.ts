@@ -23,7 +23,7 @@ export class DataRead {
      * @param model The interface / class to construct the query against and build response objects from
      * @param query A limiting query to apply to the get. Expects an object of type URLSearchParams to append to the read, or a simple string
      */
-    read<T>(model: T | any, query?: HttpParams | String) {
+    read<T>(model: T | any, query?: HttpParams | string | any) {
         this.DS.loadingMap[model.tableName] = true;
 
         const httpOpts = Object.assign({}, this.DS.httpOptions);
@@ -46,7 +46,7 @@ export class DataRead {
             );
     }
 
-    readObs<T>(model: T | any, query?: HttpParams | String): Observable<T[]> {
+    readObs<T>(model: T | any, query?: HttpParams | string | any): Observable<T[]> {
         this.DS.loadingMap[model.tableName] = true;
 
         const httpOpts = Object.assign({}, this.DS.httpOptions);
@@ -65,7 +65,7 @@ export class DataRead {
             );
     }
 
-    async readPromise<T>(model: T | any, query?: HttpParams | String): Promise<T | any> {
+    async readPromise<T>(model: T | any, query?: HttpParams | string | any): Promise<T | any> {
         this.DS.loadingMap[model.tableName] = true;
 
         const httpOpts = Object.assign({}, this.DS.httpOptions);
@@ -87,19 +87,23 @@ export class DataRead {
         }
     }
 
-    private createSearchParams(query: HttpParams | String): HttpParams {
+    private createSearchParams(query: HttpParams | string | any): HttpParams {
         let newParams = new HttpParams;
 
-        if (query instanceof String) {
-            const searchParams = new HttpParams();
+        if (typeof query === 'string') {
+            let searchParams = new HttpParams();
             const splitQuery = query.split('&');
             splitQuery.forEach(param => {
                 const keyValPair = param.split('=');
-                searchParams.set(keyValPair[0], keyValPair[1]);
+                searchParams = searchParams.set(keyValPair[0], keyValPair[1]);
             });
             newParams = searchParams;
-        } else {
+        } else if (query instanceof HttpParams) {
             newParams = query;
+        } else { // Parse object into HttpParams
+            Object.keys(query).forEach((key) => {
+                newParams = newParams.set(key, query[key]);
+            });
         }
 
         return newParams;
