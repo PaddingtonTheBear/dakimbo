@@ -60,7 +60,7 @@ export class DataUpdate {
         const url = `${this.DS.endpoint}${model.tableName}/${objToUpdate.key}`;
         try {
             const res = await fetch(url, {
-                method: 'patch',
+                method: 'PATCH',
                 body: JSON.stringify(objToUpdate)
             });
             const resJson = await res.json();

@@ -63,7 +63,7 @@ export class DataCreate {
         const url = `${this.DS.endpoint}${model.tableName}`;
         try {
             const res = await fetch(url, {
-                method: 'post',
+                method: 'POST',
                 body: JSON.stringify(objToCreate)
             });
             const resJson = await res.json();

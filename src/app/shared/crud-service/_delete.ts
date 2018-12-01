@@ -75,7 +75,7 @@ export class DataDelete {
         const url = `${this.DS.endpoint}${model.tableName}/${objToDelete.key || objToDelete.id}`;
         try {
             const res = await fetch(url, {
-                method: 'delete',
+                method: 'DELETE',
                 body: JSON.stringify(objToDelete)
             });
             const resJson = await res.json();
