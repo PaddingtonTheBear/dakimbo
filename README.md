@@ -39,3 +39,5 @@ Open your browser to http://localhost:3000/ and you should see the example page!
 # LINKS
 
 https://github.com/PaddingtonTheBear/dynamic-angular-crud
+
+https://medium.com/@jeffgilliland/creating-a-dynamic-crud-service-in-angular-992229c9be56
