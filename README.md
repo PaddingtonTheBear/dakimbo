@@ -35,3 +35,7 @@ Open your browser to http://localhost:3000/ and you should see the example page!
 1. Implement change strategy into "update" methods so that they only perform an update to the database ONLY if the front end model has changed.
 2. Investigate issues with performing "fetch" based updates.
 3. Add HTTP Headers to Fetch
+
+# LINKS
+
+https://github.com/PaddingtonTheBear/dynamic-angular-crud
