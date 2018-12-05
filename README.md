@@ -6,6 +6,11 @@
 # Dynamic Angular CRUD Service
 This project is an attempt at creating a reusable CRUD (Create, Read, Update, Delete) data service in Angular to make it easier for performing CRUD operations against many different Database Tables.
 
+# Documentation
+Check out the documentation at:
+
+https://paddingtonthebear.github.io/docs/dac/index.html
+
 # Running the Examples
 Install the code with NPM:
 
