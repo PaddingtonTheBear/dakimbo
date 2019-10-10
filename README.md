@@ -18,6 +18,8 @@ Install the code with NPM:
   npm install @paddingtonbear/dynamic-angular-crud
 ```
 
+Change directories to node_modules/@paddingtonbear/dynamic-angular-crud
+
 Then run json-server to generate a fake DB with REST endpoint:
 
 ```javascript
