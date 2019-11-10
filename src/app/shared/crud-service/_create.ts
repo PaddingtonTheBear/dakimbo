@@ -64,7 +64,10 @@ export class DataCreate {
         try {
             const res = await fetch(url, {
                 method: 'POST',
-                body: JSON.stringify(objToCreate)
+                body: JSON.stringify(objToCreate),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             });
             const resJson = await res.json();
             newModelObj.key = resJson.key || resJson.ObjectId || resJson.id || '';

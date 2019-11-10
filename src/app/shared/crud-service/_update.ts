@@ -61,7 +61,10 @@ export class DataUpdate {
         try {
             const res = await fetch(url, {
                 method: 'PATCH',
-                body: JSON.stringify(objToUpdate)
+                body: JSON.stringify(objToUpdate),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             });
             const resJson = await res.json();
             this.cacheAndNotifyUpdated(model, objToUpdate);
