@@ -1,12 +1,31 @@
-import { TestBed, async } from '@angular/core/testing';
+import { HttpClientModule } from '@angular/common/http';
+import { async, TestBed } from '@angular/core/testing';
+
 import { AppComponent } from './app.component';
+import { MaterialModule } from './material.module';
+import { DataCreate } from './shared/crud-service/_create';
+import { DataDelete } from './shared/crud-service/_delete';
+import { DataRead } from './shared/crud-service/_read';
+import { DataUpdate } from './shared/crud-service/_update';
+import { DataService } from './shared/crud-service/data.service';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [
+        MaterialModule,
+        HttpClientModule
+      ],
       declarations: [
         AppComponent
       ],
+      providers: [
+        DataService,
+        DataCreate,
+        DataRead,
+        DataUpdate,
+        DataDelete
+      ]
     }).compileComponents();
   }));
 
@@ -14,18 +33,5 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
-  });
-
-  it(`should have as title 'dynamic-angular-crud'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('dynamic-angular-crud');
-  });
-
-  it('should render title in a h1 tag', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to dynamic-angular-crud!');
   });
 });

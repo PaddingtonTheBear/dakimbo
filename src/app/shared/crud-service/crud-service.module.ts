@@ -6,6 +6,7 @@ import { DataDelete } from './_delete';
 import { DataRead } from './_read';
 import { DataUpdate } from './_update';
 import { DataService } from './data.service';
+import { DataSave } from './_save';
 
 @NgModule({
   declarations: [],
@@ -14,6 +15,7 @@ import { DataService } from './data.service';
   ],
   providers: [
     DataService,
+    DataSave,
     DataCreate,
     DataRead,
     DataUpdate,

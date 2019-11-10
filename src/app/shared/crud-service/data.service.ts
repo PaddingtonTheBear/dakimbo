@@ -8,6 +8,7 @@ import { DataCreate } from './_create';
 import { DataDelete } from './_delete';
 import { DataRead } from './_read';
 import { DataUpdate } from './_update';
+import { DataSave } from './_save';
 
 @Injectable({
   providedIn: 'root'
@@ -36,11 +37,13 @@ export class DataService {
 
   constructor(
     private http: HttpClient,
+    private DSV: DataSave,
     private DC: DataCreate,
     private DR: DataRead,
     private DU: DataUpdate,
     private DD: DataDelete
   ) {
+    this.DSV.setDataService(this);
     this.DC.setDataService(this);
     this.DR.setDataService(this);
     this.DU.setDataService(this);
@@ -64,6 +67,19 @@ export class DataService {
   /**
    * PUBLIC API
    */
+
+  // SAVE
+  save<T>(model: T | any, objToSave?: T | any) {
+    this.DSV.save(model, objToSave);
+  }
+
+  saveObs<T>(model: T | any, objToSave?: T | any): Observable<T | T[]> {
+    return this.DSV.saveObs(model, objToSave);
+  }
+
+  savePromise<T>(model: T | any, objToSave: T | any): Promise<T | any> {
+    return this.DSV.savePromise(model, objToSave);
+  }
 
   // CREATE
   create<T>(model: T | any, objToCreate?: T | any) {
@@ -108,11 +124,11 @@ export class DataService {
   delete<T>(model: T | any, objToDelete: T | any, stopNotify?: boolean) {
     this.DD.delete(model, objToDelete, stopNotify);
   }
-  
+
   deleteObs<T>(model: T | any, objToDelete: T | any): Observable<T[]> {
     return this.DD.deleteObs(model, objToDelete);
   }
-  
+
   deletePromise<T>(model: T | any, objToDelete: T | any): Promise<T | any> {
     return this.DD.deletePromise(model, objToDelete);
   }
