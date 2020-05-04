@@ -1,45 +1,27 @@
+# Dakimbo
 
-[![npm](https://img.shields.io/npm/dw/:package.svg)](https://www.npmjs.com/package/@paddingtonbear/dynamic-angular-crud)
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.0.
 
+## Development server
 
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-# Dynamic Angular CRUD Service
-This project is an attempt at creating a reusable CRUD (Create, Read, Update, Delete) data service in Angular to make it easier for performing CRUD operations against many different Database Tables.
+## Code scaffolding
 
-# Documentation
-Check out the documentation at:
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-https://paddingtonthebear.github.io/docs/dac/index.html
+## Build
 
-# Running the Examples
-Install the code with NPM:
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-```javascript
-  npm install @paddingtonbear/dynamic-angular-crud
-```
+## Running unit tests
 
-Change directories to node_modules/@paddingtonbear/dynamic-angular-crud
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-Then run json-server to generate a fake DB with REST endpoint:
+## Running end-to-end tests
 
-```javascript
-  json-server db.js
-```
+Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
-Finally, kick off the Angular dev server:
+## Further help
 
-```javascript
-  ng serve
-```
-Open your browser to http://localhost:3000/ and you should see the example page!
-
-# TODO
-1. Implement change strategy into "update" methods so that they only perform an update to the database ONLY if the front end model has changed.
-2. Investigate issues with performing "fetch" based updates.
-3. Add HTTP Headers to Fetch
-
-# LINKS
-
-https://github.com/PaddingtonTheBear/dynamic-angular-crud
-
-https://medium.com/@jeffgilliland/creating-a-dynamic-crud-service-in-angular-992229c9be56
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
