@@ -1,13 +1,15 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/dist
 /tmp
 /out-tsc
-/documentation
 
 # dependencies
 /node_modules
+
+# profiling files
+chrome-profiler-events.json
+speed-measure-plugin.json
 
 # IDEs and editors
 /.idea
@@ -20,10 +22,14 @@
 
 # IDE - VSCode
 .vscode/*
-!.vscode/settings.json
+.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+.history/*
+
+# environment variables
+.env
 
 # misc
 /.sass-cache
@@ -34,6 +40,7 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+package-lock.json
 
 # System Files
 .DS_Store
