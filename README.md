@@ -1,5 +1,8 @@
 # Dakimbo
 
+![npm](https://img.shields.io/npm/v/dakimbo) 
+![GitHub All Releases](https://img.shields.io/github/downloads/PaddingtonTheBear/dakimbo/total)
+
 ## What's Dakimbo?
 Dakimbo is intended to be an all in one package for deploying a node server that simplifies entity model definitions for your project. You define your model in one place, and then use that model in both your frontend and backend. 
 
@@ -7,7 +10,7 @@ This is accomplished by making use of NodeJS + TypeORM for automatically handlin
 
 The NodeJS server includes a data controller which acts generically by taking an entity name and handles the various persistence methods your might expect, so you don't need to constantly reinvent the wheel by writing a controller for each new entity for your application or system.
 
-Also included is an Angular "Dynamic CRUD Data Service." This service makes use of your entity definitions to automatically provide the most common functions against your entities: Create, Read, Update and Delete. 
+Also included is an [Angular Dynamic Angular CRUD Service](https://medium.com/@jeffgilliland/creating-a-dynamic-crud-service-in-angular-992229c9be56). This service makes use of your entity definitions to automatically provide the most common functions against your entities: Create, Read, Update and Delete. 
 
 By simply defining your entity model in one file, you have created your database table, your NodeJS server can handle REST routes for that entity, and your frontend application can perform CRUD against it. All from one file!
 
