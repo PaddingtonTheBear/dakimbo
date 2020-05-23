@@ -1,13 +1,13 @@
-import { tap } from 'rxjs/operators';
 import { HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 import { entityMap } from '../../entities/_entity-map';
 import { DataDelete } from './_delete';
 import { DataRead } from './_read';
 import { DataSave } from './_save';
-import { DataServiceConfig } from './data-service.module';
+import { DataServiceConfig } from './data-service-config.interface';
 
 @Injectable({
 	providedIn: 'root'
@@ -52,7 +52,7 @@ export class DataService {
 	private setupLocalProps() {
 		try {
 			// TODO: Figure out how to make a subject with the correct TS model based on the table name
-			Object.keys(this.tables).forEach(table => {
+			Object.keys(this.tables).forEach((table) => {
 				this.addTableToLocalProps(table);
 			});
 		} catch (e) {
@@ -111,7 +111,9 @@ export class DataService {
 	}
 
 	selectAllFilter<T>(model: T | any, filterProp: string, filterValue: string): T[] {
-		return this.selectAllValues<T>(model).filter(entity => entity[filterProp] === filterValue);
+		return this.selectAllValues<T>(model).filter(
+			(entity) => entity[filterProp] === filterValue
+		);
 	}
 
 	selectOne<T>(model: T | any, id: string): Observable<T> {
@@ -119,7 +121,7 @@ export class DataService {
 	}
 
 	selectOneValue<T>(model: T | any, id: any | string): T {
-		return this.cache[this.getModelName(model)].find(entity => entity.id === id);
+		return this.cache[this.getModelName(model)].find((entity) => entity.id === id);
 	}
 
 	setActive<T>(model: T | any, entity?: any | string) {
@@ -143,7 +145,7 @@ export class DataService {
 
 	deleteActive<T>(model: T | any) {
 		return this.delete(model, this.selectActive(model)).pipe(
-			tap(entity => this.setActive(model, null))
+			tap((entity) => this.setActive(model, null))
 		);
 	}
 }

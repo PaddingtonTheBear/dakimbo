@@ -1,0 +1,1 @@
+// This file is required to trick the ts-compiler into ignoring "react-native-sqlite-storage" when using entity models in the browser
