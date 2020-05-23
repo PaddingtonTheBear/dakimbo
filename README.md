@@ -26,6 +26,8 @@ The "D" refers to "data," as ultimatly everything revolves around data!
 ## Using Dakimbo
 IN PROGRESS
 
+You can clone this repo  to give yourself a starting point, install necessary packages, and then use Nx Nrwl to start adding your applications that make use of the dakimbo-server. Define your entities and make use of the data service as you see fit!
+
 ### Install Dakimbo
 ```npm install dakimbo```
 
