@@ -28,7 +28,7 @@ export default {
 		port: process.env.DB_PORT,
 		username: process.env.DB_USER,
 		password: process.env.DB_PASSWORD,
-		database: process.env.DB_DATABASE || 'sof-server',
+		database: process.env.DB_DATABASE || 'dakimbo-server',
 		synchronize: true,
 		logging: isProd ? false : false,
 		entities: Object.values(entityMap)

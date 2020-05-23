@@ -1,5 +1,5 @@
 module.exports = {
-	name: 'sof-server',
+	name: 'dakimbo-server',
 	preset: '../../jest.config.js',
-	coverageDirectory: '../../coverage/apps/sof-server'
+	coverageDirectory: '../../coverage/apps/dakimbo-server'
 };
