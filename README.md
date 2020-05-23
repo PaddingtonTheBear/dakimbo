@@ -23,5 +23,13 @@ The "D" refers to "data," as ultimatly everything revolves around data!
 ## Using Dakimbo
 IN PROGRESS
 
+### Define your entities
+Entities are defined in libs/data/src/lib/entities . After creating a TypeORM entity, add it to the ```_entity-map.ts``` file by importing and exporting it, as well as defining it in the ```entityMap``` object. This step is important as this file is where TypeORM looks to create your tables, and where your frontend maps can import the model definition (it's a barrel!);
+
 ## Developing Dakimbo
 IN PROGRESS
+
+#### Run the NodeJS Server
+Ensure you have a .env definition in your base directory (see ./apps/dakimbo-server/.env-example).
+
+Run the server with: ```npm run dev-dakimbo-server```
