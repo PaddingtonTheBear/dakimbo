@@ -28,7 +28,7 @@
 		"dev-dakimbo-server": "nx serve dakimbo-server"
 	},
 	"dependencies": {
-		"@nrwl/angular": "9.3.0",
+		"@nrwl/angular": "15.4.2",
 		"@angular/animations": "9.1.7",
 		"@angular/common": "9.1.7",
 		"@angular/compiler": "9.1.7",
@@ -53,12 +53,12 @@
 		"bcryptjs": "^2.4.3"
 	},
 	"devDependencies": {
-		"@angular-devkit/build-angular": "0.901.0",
+		"@angular-devkit/build-angular": "15.0.4",
 		"@angular/cli": "9.1.7",
 		"@angular/compiler-cli": "9.1.7",
 		"@angular/language-service": "9.1.7",
-		"@nrwl/cypress": "9.3.0",
-		"@nrwl/express": "9.3.0",
+		"@nrwl/cypress": "15.4.2",
+		"@nrwl/express": "9.8.0",
 		"@nrwl/jest": "9.3.0",
 		"@nrwl/workspace": "9.3.0",
 		"@types/helmet": "0.0.45",
