@@ -42,7 +42,7 @@
 		"zone.js": "^0.10.2",
 		"express": "4.17.1",
 		"helmet": "^3.21.2",
-		"jsonwebtoken": "^8.5.1",
+		"jsonwebtoken": "^9.0.0",
 		"mongodb": "^3.5.7",
 		"mssql": "^5.1.0",
 		"typeorm": "^0.2.20",
